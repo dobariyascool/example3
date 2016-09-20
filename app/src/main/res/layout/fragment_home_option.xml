@@ -44,7 +44,6 @@
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
 
-
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvAdminDailySales"
                         style="@style/CardViewNewOption"
@@ -74,7 +73,6 @@
                                 android:textColor="@color/primary"
                                 android:textSize="@dimen/control_TextMedium" />
 
-
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/leftHeight"
@@ -98,7 +96,6 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -110,7 +107,6 @@
                     android:layout_marginStart="@dimen/control_SpecingSmall"
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
-
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvAdminWeeklySales"
@@ -146,7 +142,6 @@
                                 android:layout_height="@dimen/leftHeight"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.1"
-                                android:contentDescription="@string/currency"
                                 android:gravity="center"
                                 app:srcCompat="@drawable/currency_inr" />
 
@@ -164,7 +159,6 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -176,7 +170,6 @@
                     android:layout_marginStart="@dimen/control_SpecingSmall"
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
-
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvAdminMonthlySales"
@@ -212,7 +205,6 @@
                                 android:layout_height="@dimen/leftHeight"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.1"
-                                android:contentDescription="@string/currency"
                                 android:gravity="center"
                                 app:srcCompat="@drawable/currency_inr" />
 
@@ -230,7 +222,6 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -242,7 +233,6 @@
                     android:layout_marginStart="@dimen/control_SpecingSmall"
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
-
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvAdminLeastDay"
@@ -278,7 +268,6 @@
                                 android:layout_height="@dimen/leftHeight"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.1"
-                                android:contentDescription="@string/currency"
                                 android:gravity="center"
                                 app:srcCompat="@drawable/currency_inr" />
 
@@ -295,7 +284,6 @@
                                 android:textSize="@dimen/control_TextMedium" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
 
                 </LinearLayout>
 
@@ -319,7 +307,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -332,7 +320,6 @@
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
 
-
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvUserNewOrder"
                         style="@style/CardViewNewOption"
@@ -341,7 +328,6 @@
                         android:layout_marginEnd="@dimen/control_SpecingSmall"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/blue_900">
-
 
                         <com.rey.material.widget.TextView
                             android:id="@+id/txtUserNewOrderCount"
@@ -522,7 +508,6 @@
                     android:layout_marginStart="@dimen/control_SpecingSmall"
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="horizontal">
-
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/cvUserModeOffer"

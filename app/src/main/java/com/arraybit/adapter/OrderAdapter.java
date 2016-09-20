@@ -32,7 +32,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderMasterV
     LayoutInflater layoutInflater;
     View view;
     int previousPosition;
-    ArrayList<OrderMaster> alOrderMaster;
+    public ArrayList<OrderMaster> alOrderMaster;
     SimpleDateFormat sdfDate = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     String today;
     Date toDate, currentDate;
@@ -125,6 +125,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderMasterV
         alOrderMaster.get(position).setlinktoOrderStatusMasterId((short) Globals.OrderStatus.Cancelled.getValue());
         isItemAnimate = false;
         notifyItemChanged(position);
+    }
+
+    public void RemoveOrderData(int position) {
+        if (alOrderMaster.size() != 0 && position >= 0) {
+            isItemAnimate = true;
+            alOrderMaster.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     @Override

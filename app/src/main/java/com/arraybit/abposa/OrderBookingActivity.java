@@ -334,7 +334,12 @@ public class OrderBookingActivity extends AppCompatActivity implements ItemJSONP
                     Globals.ShowSnackBar(rvOrdersBookings, getResources().getString(R.string.MsgServerNotResponding), OrderBookingActivity.this, 1000);
                     break;
                 default:
-                    adapter.UpdateOrderData(position);
+                    adapter.RemoveOrderData(position);
+                    if (adapter.alOrderMaster.size() == 0) {
+                        alOrderMaster = adapter.alOrderMaster;
+                        Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvOrdersBookings, 0);
+//                        SetRecyclerView();
+                    }
                     break;
             }
         } else if (activityName.equals(getResources().getString(R.string.golfNewBookings)) || activityName.equals(getResources().getString(R.string.golfCancelledBookings))) {
@@ -347,12 +352,16 @@ public class OrderBookingActivity extends AppCompatActivity implements ItemJSONP
                     break;
                 default:
                     //Globals.ShowSnackBar(view, getActivity().getResources().getString(R.string.ybAddBookingSuccessMsg), getActivity(), 1000);
-                    bookingAdapter.UpdateBookingStatus(position);
+                    bookingAdapter.RemoveBookingItem(position);
+                    if (bookingAdapter.alBookingMaster.size() == 0) {
+                        alBookingMaster = bookingAdapter.alBookingMaster;
+                        Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvOrdersBookings, 0);
+//                        SetRecyclerView();
+                    }
                     //(getActivity()).setResult(Activity.RESULT_OK);
                     //(getActivity()).finish();
                     break;
             }
         }
-
     }
 }

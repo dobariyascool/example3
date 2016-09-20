@@ -30,7 +30,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingM
     LayoutInflater inflater;
     View ConvertView;
     int previousPosition;
-    ArrayList<BookingMaster> alBookingMaster;
+    public ArrayList<BookingMaster> alBookingMaster;
     BookingOnClickListener objBookingOnClickListener;
     int position;
     Date toDate, toTime, currentTime, currentDate;
@@ -129,6 +129,14 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingM
         alBookingMaster.addAll(result);
         isItemAnimate = false;
         notifyDataSetChanged();
+    }
+
+    public void RemoveBookingItem(int position) {
+        if (alBookingMaster.size() != 0 && position >= 0) {
+            isItemAnimate = true;
+            alBookingMaster.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     public void BookingDataChanged(BookingMaster objBookingMaster) {
