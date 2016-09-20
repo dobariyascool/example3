@@ -1,0 +1,147 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.arraybit.abposa.EventFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvTodaysEvent"
+                    style="@style/CardViewNewOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/control_SpecingSmall"
+                    app:cardBackgroundColor="@color/card_white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/control_SpecingTiny"
+                        android:orientation="horizontal">
+
+                        <com.rey.material.widget.TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="@dimen/control_SpecingTiny"
+                            android:layout_weight="1"
+                            android:paddingBottom="@dimen/control_SpecingXS"
+                            android:paddingTop="@dimen/control_SpecingXS"
+                            android:text="@string/todaysEvent"
+                            android:textColor="@android:color/black"
+                            android:textSize="12dp" />
+
+                        <ImageView
+                            android:id="@+id/ivTodaysEvent"
+                            android:layout_width="20dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:contentDescription="@string/event"
+                            android:layout_marginEnd="@dimen/control_SpecingSmall"
+                            app:srcCompat="@drawable/menu_down" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvTodaysEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:visibility="gone" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtTodayNoEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:gravity="center"
+                    android:text="@string/no_events_avilable"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvUpcomingEvent"
+                    style="@style/CardViewNewOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/control_SpecingSmall"
+                    app:cardBackgroundColor="@color/card_white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/control_SpecingTiny"
+                        android:orientation="horizontal">
+
+                        <com.rey.material.widget.TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="@dimen/control_SpecingTiny"
+                            android:layout_weight="1"
+                            android:paddingBottom="@dimen/control_SpecingXS"
+                            android:paddingTop="@dimen/control_SpecingXS"
+                            android:text="@string/upcomingEvent"
+                            android:textColor="@android:color/black"
+                            android:textSize="12dp" />
+
+                        <ImageView
+                            android:id="@+id/ivUpcomingEvent"
+                            android:layout_width="20dp"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/event"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="@dimen/control_SpecingSmall"
+                            app:srcCompat="@drawable/menu_down" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvUpcomingEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:visibility="gone" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtUpcomingNoEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:gravity="center"
+                    android:text="@string/no_events_avilable"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.arraybit.abposa.AnalysisFragment">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_layout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvSalesAnalysis"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/control_SpecingSmall"
+        android:paddingLeft="@dimen/control_SpecingSmall"
+        android:paddingRight="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingSmall"
+        tools:ignore="NestedWeights" />
+
+</LinearLayout>

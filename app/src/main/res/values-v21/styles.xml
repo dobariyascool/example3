@@ -1,0 +1,73 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:windowTranslucentStatus">false</item>
+        <!--<item name="android:windowAllowEnterTransitionOverlap">true</item>-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <!--<item name="android:windowTransitionBackgroundFadeDuration">0</item>-->
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorEdgeEffect">@color/primary_light</item>
+        <!--//used for scrolling effect-->
+        <!--//used for ripple effect and list selector-->
+        <!--<item name="android:colorControlHighlight">@color/transparent_orange</item>-->
+    </style>
+
+    <style name="FloatingMiniButton" parent="FloatingButtonDesignSupport">
+        <item name="rippleColor">@color/orange_light</item>
+        <item name="fabSize">mini</item>
+        <item name="android:src">@drawable/edit</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:layout_marginTop">170dp</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingMedium</item>
+        <item name="backgroundTint">@color/orange</item>
+        <item name="pressedTranslationZ">12dp</item>//show shadow when pressed
+    </style>
+
+    <style name="AppCompactCardView">android.support.v7.CardView</style>
+
+    <style name="DefaultCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="android:layout_marginBottom">@dimen/control_SpecingSmall</item>
+        <item name="android:layout_marginStart">@dimen/control_SpecingSmall</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingSmall</item>
+    </style>
+
+    <style name="CardViewTransparent" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="cardBackgroundColor">@color/card_white</item>
+        <item name="android:layout_marginBottom">@dimen/control_SpecingSmall</item>
+        <item name="android:layout_marginStart">@dimen/control_SpecingTiny</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingTiny</item>
+        <item name="android:foreground">@drawable/offer_ripple_effect</item>
+    </style>
+
+    <!--<style name="ToolBar" parent="ThemeOverlay.AppCompat.Light">-->
+        <!--<item name="android:textColorPrimary">@android:color/white</item>-->
+        <!--<item name="android:textColorSecondary">@android:color/white</item>-->
+        <!--<item name="android:background">@color/primary</item>-->
+    <!--</style>-->
+
+    <style name="BusinessInfoCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="cardBackgroundColor">@color/offwhite</item>
+    </style>
+
+</resources>

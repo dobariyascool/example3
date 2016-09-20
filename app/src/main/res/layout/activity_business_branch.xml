@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/businessBranchLayout"
+    android:background="@color/background_img"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.arraybit.abposa.BusinessBranchActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_layout" />
+
+    <include
+        android:id="@+id/errorLayout"
+        layout="@layout/error_layout"
+        android:visibility="gone" />
+
+    <com.rey.material.widget.TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/control_SpecingSmall"
+        android:text="@string/bbaSelectCity"
+        android:textColor="@color/primary_dark"
+        android:textSize="@dimen/control_TextMedium" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginEnd="@dimen/control_SpecingSmall"
+        android:layout_marginStart="@dimen/control_SpecingSmall">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spOrderCity"
+            style="@style/Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/toggle_drawable"
+            android:dropDownWidth="match_parent"
+            android:visibility="visible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:gravity="center_vertical|bottom|end"
+            app:srcCompat="@drawable/menu_down"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtBranchHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/control_SpecingSmall"
+        android:text="@string/bbaSelectBranch"
+        android:textColor="@color/primary_dark"
+        android:textSize="@dimen/control_TextMedium" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvBusinessBranch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/control_SpecingTiny"
+        android:visibility="gone" />
+
+</LinearLayout>

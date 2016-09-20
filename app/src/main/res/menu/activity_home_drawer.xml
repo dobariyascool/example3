@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_my_account"
+        android:icon="@drawable/account"
+        android:title="@string/drawer_my_account" />
+    <item
+        android:id="@+id/nav_analyis"
+        android:icon="@drawable/analysis"
+        android:title="@string/drawer_analysis" />
+    <item
+        android:id="@+id/nav_events"
+        android:icon="@drawable/events"
+        android:title="@string/drawer_events" />
+    <item
+        android:id="@+id/nav_business"
+        android:icon="@drawable/business"
+        android:title="@string/drawer_business" />
+    <item
+        android:id="@+id/nav_offers"
+        android:icon="@drawable/tag_multiple"
+        android:title="@string/drawer_offers" />
+    <item
+        android:id="@+id/nav_notification"
+        android:icon="@drawable/notification"
+        android:title="@string/drawer_notification" />
+    <item
+        android:id="@+id/nav_rate_us"
+        android:icon="@drawable/rate"
+        android:title="@string/drawer_rate_us" />
+    <item
+        android:id="@+id/nav_exit"
+        android:icon="@drawable/exit"
+        android:title="@string/drawer_exit" />
+
+
+</menu>

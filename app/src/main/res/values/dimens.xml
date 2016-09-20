@@ -1,0 +1,76 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- set elevation -->
+    <dimen name="app_bar_elevation">4dp</dimen>
+    <dimen name="top_bar_elevation">8dp</dimen>
+    <dimen name="navigation_view_elevation">16dp</dimen>
+    <dimen name="snackbar_elevation">6dp</dimen>
+    <dimen name="button_Height">45dp</dimen>
+
+    <dimen name="control_SpecingXS">2dp</dimen>
+    <dimen name="control_SpecingTiny">4dp</dimen>
+    <dimen name="control_SpecingSmall">8dp</dimen>
+    <dimen name="control_SpecingNormal">12dp</dimen>
+    <dimen name="control_SpecingMedium">16dp</dimen>
+    <dimen name="control_SpecingLarge">24dp</dimen>
+
+    <dimen name="control_TextTiny">10sp</dimen>
+    <dimen name="control_TextSmall">12sp</dimen>
+    <dimen name="control_TextNormal">14sp</dimen>
+    <dimen name="control_TextMedium">16sp</dimen>
+    <dimen name="control_TextLarge">24sp</dimen>
+
+    <dimen name="qty_image_height">35dp</dimen>
+    <dimen name="qty_image_width">40dp</dimen>
+    <dimen name="button_marginTop">@dimen/control_SpecingTiny</dimen>
+    <dimen name="button_marginBottom">2dp</dimen>
+    <dimen name="button_marginStart">@dimen/control_SpecingTiny</dimen>
+    <dimen name="button_marginEnd">@dimen/control_SpecingTiny</dimen>
+    <dimen name="logo_height">70dp</dimen>
+    <dimen name="logo_width">70dp</dimen>
+    <dimen name="offer_layout_width">180dp</dimen>
+
+    <!-- START Toogle Buttons -->
+    <dimen name="tbutton_Height">24dp</dimen>
+    <dimen name="tbutton_Width">24dp</dimen>
+    <dimen name="tbutton_MarginTop">8dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="navWidth">280dp</dimen>
+    <!-- END Toogle Buttons -->
+
+    <!-- START Cards -->
+    <dimen name="card_MinimumHeight">56dp</dimen>
+    <dimen name="card_ActionPadding">8dp</dimen>
+    <dimen name="card_TextPadding">14dp</dimen>
+    <dimen name="card_TitleArea">72dp</dimen>
+    <dimen name="card_CornerRadius">4dp</dimen>
+    <dimen name="card_Elevation">2dp</dimen>
+    <dimen name="card_Margin">8dp</dimen>
+
+    <dimen name="card_PrimaryText">24sp</dimen>
+    <dimen name="card_SubtitleText">14sp</dimen>
+    <dimen name="leftHeight">40dp</dimen>
+    <!-- END Cards -->
+
+    <!--Start Circular TextView -->
+    <dimen name="ct_height">64dp</dimen>
+    <dimen name="ct_width">64dp</dimen>
+    <!-- END-->
+
+    <!-- dialog button -->
+    <dimen name="dialog_button_height">36dp</dimen>
+    <dimen name="dialog_button_layout_height">52dp</dimen>
+    <dimen name="dialog_button_layout_margin_top">24dp</dimen>
+    <dimen name="dialog_margin">24dp</dimen>
+    <dimen name="dialog_button_padding_end">8dp</dimen>
+    <dimen name="dialog_button_padding_top">8dp</dimen>
+    <dimen name="dialog_button_padding_bottom">8dp</dimen>
+    <!-- end -->
+
+</resources>
