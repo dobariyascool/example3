@@ -65,7 +65,8 @@
         <item name="cet_spanSpacing">4dp</item>
         <item name="et_supportMode">helper</item>
         <item name="et_dividerHeight">2dp</item>
-        <item name="et_supportTextErrorColor">@color/accent_light</item>
+        <item name="et_supportTextErrorColor">@color/error_text</item>
+        <item name="et_supportMaxLines">1</item>
         <item name="android:textColorHint">@color/grey_800</item>
         <item name="et_dividerErrorColor">@color/accent_light</item>
         <item name="android:textColor">@color/primary_dark</item>
@@ -143,22 +144,25 @@
     <style name="CardViewOption" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="cardBackgroundColor">#65000000</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
+        <item name="cardBackgroundColor">#edbf47</item>
     </style>
 
     <style name="CardViewNewOption" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
         <item name="cardBackgroundColor">@color/card_white</item>
     </style>
 
     <style name="CardViewCancelledOption" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="cardBackgroundColor">@color/card_light_green</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
+        <item name="cardBackgroundColor">#ec774b</item>
     </style>
 
     <style name="PrimaryTextView">
@@ -171,7 +175,10 @@
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
-        <!--<item name="android:layout_marginBottom">@dimen/card_Margin</item>-->
+        <item name="cardBackgroundColor">@color/background_img</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
+        <item name="android:layout_marginStart">@dimen/control_SpecingTiny</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingTiny</item>
     </style>
 
     <style name="CardViewTransparent" parent="AppCompactCardView">
@@ -185,7 +192,7 @@
     <style name="HighLightedTextView">
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Caption</item>
         <!--<item name="android:textColor">#795310</item>-->
-        <item name="android:textColor">#69470b</item>
+        <item name="android:textColor">@color/accent_dark</item>
         <item name="android:textSize">@dimen/control_TextMedium</item>
     </style>
 
@@ -235,8 +242,49 @@
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="android:layout_marginBottom">1dp</item>
-        <item name="cardBackgroundColor">@color/offwhite</item>
+        <item name="android:layout_marginBottom">@dimen/control_SpecingTiny</item>
+        <item name="cardBackgroundColor">@color/background_img</item>
+    </style>
+
+    <style name="Switch">
+        <item name="sw_trackSize">14dp</item>
+        <item name="sw_trackCap">round</item>
+        <item name="sw_thumbRadius">10dp</item>
+        <item name="sw_thumbElevation">2dp</item>
+        <item name="sw_animDuration">@android:integer/config_shortAnimTime</item>
+        <item name="sw_interpolator">@android:anim/decelerate_interpolator</item>
+    </style>
+
+    <style name="MaterialButton">com.rey.material.widget.Button</style>
+
+    <style name="StatusButton" parent="MaterialButton">
+        <item name="android:background">@drawable/call_btn_border</item>
+        <item name="android:padding">@dimen/control_SpecingSmall</item>
+        <item name="android:textSize">@dimen/control_TextSmall</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="rd_enable">false</item>
+        <!--<item name="android:fontFamily">Roboto-Regular</item>-->
+    </style>
+
+    <style name="FloatingActionButton">com.github.clans.fab.FloatingActionButton</style>
+
+    <style name="FloatingButton" parent="FloatingActionButton">
+        <item name="fab_colorNormal">@color/accent</item>
+        <item name="rd_rippleColor">@color/accent_light</item>
+        <item name="fab_size">normal</item>
+        <item name="fab_colorPressed">@color/accent_light</item>
+    </style>
+
+    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">#009688</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:textSize">@dimen/control_TextMedium</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:layout_margin">0dp</item>
     </style>
 
 </resources>

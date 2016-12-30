@@ -30,6 +30,7 @@ public class BusinessMaster implements Parcelable {
     short linktoBusinessTypeMasterId;
     String UniqueId;
     boolean IsEnabled;
+    String CreateDateTime;
     /// Extra
     String Country;
     String State;
@@ -62,6 +63,7 @@ public class BusinessMaster implements Parcelable {
             objBusinessMaster.linktoBusinessTypeMasterId = (short)source.readInt();
             objBusinessMaster.UniqueId = source.readString();
             objBusinessMaster.IsEnabled = source.readByte() != 0;
+            objBusinessMaster.CreateDateTime = source.readString();
 
             /// Extra
             objBusinessMaster.Country = source.readString();
@@ -188,6 +190,14 @@ public class BusinessMaster implements Parcelable {
         return BusinessGroup;
     }
 
+    public String getCreateDateTime() {
+        return CreateDateTime;
+    }
+
+    public void setCreateDateTime(String createDateTime) {
+        CreateDateTime = createDateTime;
+    }
+
     //endregion
 
     public void setBusinessGroup(String businessGroup) {
@@ -222,6 +232,7 @@ public class BusinessMaster implements Parcelable {
         parcel.writeInt(linktoBusinessTypeMasterId);
         parcel.writeString(UniqueId);
         parcel.writeByte((byte)(IsEnabled ? 1 : 0));
+        parcel.writeString(CreateDateTime);
 
         /// Extra
         parcel.writeString(Country);

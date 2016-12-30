@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ParseException;
 import android.util.Log;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -13,12 +12,10 @@ import com.android.volley.toolbox.Volley;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessMaster;
-//import com.arraybit.modal.ContactUsMaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -30,6 +27,9 @@ public class BusinessJSONParser {
 
     public String SelectAllBusinessMasterByBusinessGroup = "SelectAllBusinessMasterByBusinessGroup";
     BusinessRequestListener objBusinessRequestListener;
+    public Date dt = null;
+    public SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+    SimpleDateFormat sdfDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     private BusinessMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         BusinessMaster objBusinessMaster = null;
@@ -59,6 +59,10 @@ public class BusinessJSONParser {
                 objBusinessMaster.setlinktoBusinessTypeMasterId((short) jsonObject.getInt("linktoBusinessTypeMasterId"));
                 objBusinessMaster.setUniqueId(jsonObject.getString("UniqueId"));
                 objBusinessMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
+                if (!jsonObject.getString("CreateDateTime").equals("null")) {
+                    dt = sdfDateFormat.parse(jsonObject.getString("CreateDateTime"));
+                    objBusinessMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
+                }
 
                 /// Extra
                 objBusinessMaster.setCountry(jsonObject.getString("Country"));
@@ -67,9 +71,7 @@ public class BusinessJSONParser {
                 objBusinessMaster.setBusinessGroup(jsonObject.getString("BusinessGroup"));
             }
             return objBusinessMaster;
-        } catch (JSONException e) {
-            return null;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -103,6 +105,10 @@ public class BusinessJSONParser {
                 objBusinessMaster.setlinktoBusinessTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessTypeMasterId"));
                 objBusinessMaster.setUniqueId(jsonArray.getJSONObject(i).getString("UniqueId"));
                 objBusinessMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
+                if (!jsonArray.getJSONObject(i).getString("CreateDateTime").equals("null")) {
+                    dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
+                    objBusinessMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
+                }
 
                 /// Extra
                 objBusinessMaster.setCountry(jsonArray.getJSONObject(i).getString("Country"));
@@ -112,9 +118,7 @@ public class BusinessJSONParser {
                 lstBusinessMaster.add(objBusinessMaster);
             }
             return lstBusinessMaster;
-        } catch (JSONException e) {
-            return null;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -122,46 +126,46 @@ public class BusinessJSONParser {
     public void SelectAllBusinessMasterByBusinessGroup(final Context context, String linktoBusinessGroupMasterId, String city) {
         try {
             String url;
-            if(city==null){
-                url = Service.Url + this.SelectAllBusinessMasterByBusinessGroup + "/" + linktoBusinessGroupMasterId + "/"+null;
-            }else{
-                url = Service.Url + this.SelectAllBusinessMasterByBusinessGroup + "/" + linktoBusinessGroupMasterId + "/"+ URLEncoder.encode(city,"UTF-8");
+            if (city == null) {
+                url = Service.Url + this.SelectAllBusinessMasterByBusinessGroup + "/" + linktoBusinessGroupMasterId + "/" + null;
+            } else {
+                url = Service.Url + this.SelectAllBusinessMasterByBusinessGroup + "/" + linktoBusinessGroupMasterId + "/" + URLEncoder.encode(city, "UTF-8");
             }
-            Log.e("url"," "+url);
+            Log.e("url", " " + url);
             RequestQueue queue = Volley.newRequestQueue(context);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     try {
-                        Log.e("json"," "+jsonObject);
+                        Log.e("json", " " + jsonObject);
                         JSONArray jsonArray = jsonObject.getJSONArray(SelectAllBusinessMasterByBusinessGroup + "Result");
                         if (jsonArray != null) {
                             ArrayList<BusinessMaster> alBusinessMaster = SetListPropertiesFromJSONArray(jsonArray);
                             objBusinessRequestListener = (BusinessRequestListener) context;
-                            objBusinessRequestListener.BusinessResponse(null, null, alBusinessMaster);
+                            objBusinessRequestListener.BusinessResponse(null, alBusinessMaster);
 
                         }
                     } catch (Exception e) {
                         objBusinessRequestListener = (BusinessRequestListener) context;
-                        objBusinessRequestListener.BusinessResponse(null, null, null);
+                        objBusinessRequestListener.BusinessResponse(null, null);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     objBusinessRequestListener = (BusinessRequestListener) context;
-                    objBusinessRequestListener.BusinessResponse(null, null, null);
+                    objBusinessRequestListener.BusinessResponse(null, null);
                 }
             });
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
             objBusinessRequestListener = (BusinessRequestListener) context;
-            objBusinessRequestListener.BusinessResponse(null, null, null);
+            objBusinessRequestListener.BusinessResponse(null, null);
         }
     }
 
     public interface BusinessRequestListener {
-        void BusinessResponse(String errorCode, BusinessMaster objBusinessMaster, ArrayList<BusinessMaster> alBusinessMaster);
+        void BusinessResponse(String errorCode, ArrayList<BusinessMaster> alBusinessMaster);
     }
 
 }

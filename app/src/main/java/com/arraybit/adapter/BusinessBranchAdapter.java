@@ -19,7 +19,6 @@ public class BusinessBranchAdapter extends RecyclerView.Adapter<BusinessBranchAd
     Context context;
     LayoutInflater inflater;
     View view;
-    int position;
     BranchSelectorListener objBranchSelectorListener;
     ArrayList<BusinessMaster> alBusinessMaster;
 

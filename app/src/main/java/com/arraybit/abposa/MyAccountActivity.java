@@ -1,10 +1,11 @@
 package com.arraybit.abposa;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import com.arraybit.adapter.MyAccountAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.rey.material.widget.Switch;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,12 +32,14 @@ import java.util.ArrayList;
 public class MyAccountActivity extends AppCompatActivity implements MyAccountAdapter.OptionClickListener {
 
     ArrayList<String> alString;
+    ArrayList<Boolean> alStringIsSwitch;
     RecyclerView rvOptions;
-//    FloatingActionButton fabEdit;
+    //    FloatingActionButton fabEdit;
     TextView txtLoginChar, txtFullName, txtEmail;
     FrameLayout myAccountLayout;
     ImageView ivProfile;
-
+    SharePreferenceManage sharePreferenceManage;
+    MyAccountAdapter accountAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,8 @@ public class MyAccountActivity extends AppCompatActivity implements MyAccountAda
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        sharePreferenceManage = new SharePreferenceManage();
 
         myAccountLayout = (FrameLayout) findViewById(R.id.myAccountLayout);
         txtLoginChar = (TextView) findViewById(R.id.txtLoginChar);
@@ -58,7 +64,7 @@ public class MyAccountActivity extends AppCompatActivity implements MyAccountAda
         GetData();
 
         rvOptions = (RecyclerView) findViewById(R.id.rvOptions);
-        MyAccountAdapter accountAdapter = new MyAccountAdapter(alString, MyAccountActivity.this, this);
+        accountAdapter = new MyAccountAdapter(alString, alStringIsSwitch, MyAccountActivity.this, MyAccountActivity.this, this);
         rvOptions.setAdapter(accountAdapter);
         rvOptions.setLayoutManager(new LinearLayoutManager(MyAccountActivity.this));
 
@@ -112,9 +118,14 @@ public class MyAccountActivity extends AppCompatActivity implements MyAccountAda
 
     private void GetData() {
         alString = new ArrayList<>();
+        alStringIsSwitch = new ArrayList<>();
 
         for (int i = 0; i < getResources().getStringArray(R.array.Option).length; i++) {
             alString.add(getResources().getStringArray(R.array.Option)[i]);
+        }
+
+        for (int i = 0; i < getResources().getStringArray(R.array.isOptionSwitch).length; i++) {
+            alStringIsSwitch.add(Boolean.valueOf(getResources().getStringArray(R.array.isOptionSwitch)[i]));
         }
     }
 
@@ -139,7 +150,7 @@ public class MyAccountActivity extends AppCompatActivity implements MyAccountAda
         if (id == 0 && this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
 //            ReplaceFragment(new YourAddressFragment(), getResources().getString(R.string.title_fragment_your_address));
         } else if (id == 1 && this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            ReplaceFragment(new ChangePasswordFragment(), getResources().getString(R.string.title_fragment_change_password));
+                ReplaceFragment(new ChangePasswordFragment(), getResources().getString(R.string.title_fragment_change_password));
         } else if (id == 2 && this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
             Globals.ClearPreference(MyAccountActivity.this);
             Intent intent = new Intent(MyAccountActivity.this, SignInActivity.class);
@@ -148,5 +159,44 @@ public class MyAccountActivity extends AppCompatActivity implements MyAccountAda
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
             finish();
         }
+    }
+
+    @Override
+    public void NotificationOnOff(int position, Switch aSwitch) {
+        if (aSwitch.isChecked()) {
+            sharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", MyAccountActivity.this);
+            sharePreferenceManage.CreatePreference("NotificationSettingPreference", "Push", "true", MyAccountActivity.this);
+            Globals.EnableBroadCastReceiver(MyAccountActivity.this);
+        } else {
+            ConfirmNotificationSettings(aSwitch);
+        }
+    }
+
+    private void ConfirmNotificationSettings(final Switch aSwitch) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MyAccountActivity.this);
+        alertDialogBuilder
+                .setMessage(getResources().getString(R.string.MsgConfirmSettings))
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                sharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", MyAccountActivity.this);
+                                sharePreferenceManage.CreatePreference("NotificationSettingPreference", "Push", "false", MyAccountActivity.this);
+                                Globals.DisableBroadCastReceiver(MyAccountActivity.this);
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                             //  accountAdapter.SetSwitch();
+                                aSwitch.setChecked(true);
+                                Globals.EnableBroadCastReceiver(MyAccountActivity.this);
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
     }
 }

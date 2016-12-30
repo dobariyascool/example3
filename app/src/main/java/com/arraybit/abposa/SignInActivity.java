@@ -3,12 +3,13 @@ package com.arraybit.abposa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener, UserJSONParser.UserRequestListener, BusinessJSONParser.BusinessRequestListener {
 
-    Toolbar app_bar;
     EditText etUserName, etPassword;
     ImageView ibClear;
     ToggleButton tbPasswordShow;
@@ -40,6 +40,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     UserMaster objUserMaster;
     SharePreferenceManage objSharePreferenceManage;
     UserJSONParser objUserJSONParser;
+    LinearLayout internetLayout,signInLayout;
     //    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private String token;
 
@@ -47,27 +48,28 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-//        app_bar = (Toolbar) findViewById(R.id.app_bar);
-//        setSupportActionBar(app_bar);
-//        if (app_bar != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            if (Build.VERSION.SDK_INT >= 21) {
-//                app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
-//            }
-//        }
+
         try {
-            FCMTokenGenerate();
+            if (Service.CheckNet(this)) {
+                FCMTokenGenerate();
+            }
             etUserName = (EditText) findViewById(R.id.etUserName);
             etPassword = (EditText) findViewById(R.id.etPassword);
+            signInLayout = (LinearLayout) findViewById(R.id.signInLayout);
+
+            internetLayout = (LinearLayout) findViewById(R.id.internetLayout);
+            Button btnRetry = (Button) internetLayout.findViewById(R.id.btnRetry);
 
             Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
             ibClear = (ImageView) findViewById(R.id.ibClear);
             tbPasswordShow = (ToggleButton) findViewById(R.id.tbPasswordShow);
 
             btnSignIn.setOnClickListener(this);
+            btnRetry.setOnClickListener(this);
 
             ibClear.setOnClickListener(this);
             tbPasswordShow.setOnClickListener(this);
+            Globals.HideKeyBoard(SignInActivity.this,signInLayout);
 
             etUserName.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -111,6 +113,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
+            if (Service.CheckNet(this)) {
+                internetLayout.setVisibility(View.GONE);
+                signInLayout.setVisibility(View.VISIBLE);
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            } else {
+                internetLayout.setVisibility(View.VISIBLE);
+                Globals.SetErrorLayout(internetLayout, true, getResources().getString(R.string.MsgCheckConnection), null, R.drawable.wifi_off);
+                signInLayout.setVisibility(View.GONE);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +150,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+        }else if (v.getId() == R.id.btnRetry) {
+            if (Service.CheckNet(SignInActivity.this)) {
+//                CheckUserNamePassword();
+                FCMTokenGenerate();
+                internetLayout.setVisibility(View.GONE);
+                signInLayout.setVisibility(View.VISIBLE);
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             }
         }
     }
@@ -182,7 +202,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void BusinessResponse(String errorCode, BusinessMaster objBusinessMaster, ArrayList<BusinessMaster> alBusinessMaster) {
+    public void BusinessResponse(String errorCode, ArrayList<BusinessMaster> alBusinessMaster) {
         progressDialog.dismiss();
 
         if (alBusinessMaster != null && alBusinessMaster.size() != 0) {
@@ -332,6 +352,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             //If play service is available
         } else {
+
             FirebaseMessaging.getInstance().subscribeToTopic("news");
             // [END subscribe_topics]
 
@@ -346,7 +367,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 //            Log.e("mainActivity", "token:   "+token);
 //            Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void RequestAllBusiness() {

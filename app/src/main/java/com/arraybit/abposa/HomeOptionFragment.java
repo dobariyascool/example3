@@ -2,6 +2,7 @@ package com.arraybit.abposa;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,7 +29,7 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
     TextView dailySales, monthlySales, weeklySales, leastDaySale;
     TextView newOrder, newBooking, cancelOrder, cancelBooking;
     CardView cvUserModeOffer, cvUserModeReedem, cvUserCancelledOrder, cvUserNewOrder, cvUserNewBooking, cvUserCancelledBooking;
-    CardView cvAdminDailySales, cvAdminMonthlySales;
+    CardView cvAdminDailySales, cvAdminMonthlySales, cvAdminLeastDay, cvAdminWeeklySales;
 
     LinearLayout llEventFragment;
 
@@ -66,7 +67,14 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
             cvUserModeReedem = (CardView) rootView.findViewById(R.id.cvUserModeReedem);
 
             cvAdminDailySales = (CardView) rootView.findViewById(R.id.cvAdminDailySales);
+            cvAdminWeeklySales = (CardView) rootView.findViewById(R.id.cvAdminWeeklySales);
             cvAdminMonthlySales = (CardView) rootView.findViewById(R.id.cvAdminMonthlySales);
+            cvAdminLeastDay = (CardView) rootView.findViewById(R.id.cvAdminLeastDay);
+
+            if(Build.VERSION.SDK_INT < 21)
+            {
+
+            }
 
             cvUserNewOrder.setOnClickListener(this);
             cvUserCancelledOrder.setOnClickListener(this);
@@ -76,7 +84,9 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
             cvUserModeReedem.setOnClickListener(this);
 
             cvAdminDailySales.setOnClickListener(this);
+            cvAdminWeeklySales.setOnClickListener(this);
             cvAdminMonthlySales.setOnClickListener(this);
+            cvAdminLeastDay.setOnClickListener(this);
 
             llEventFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.layout_separator));
 
@@ -100,6 +110,7 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
                 adminModeLayout.setVisibility(View.VISIBLE);
                 if (Service.CheckNet(getActivity())) {
                     DataRequestAdmin();
+                    DataRequestLeastDay();
                 } else {
                     Globals.ShowSnackBar(rootView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
@@ -152,13 +163,23 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
 
         } else if (v.getId() == R.id.cvAdminDailySales) {
             Intent intent = new Intent(getActivity(), DailySalesActivity.class);
-            intent.putExtra("SalesReportType", "Daily Sales");
+            intent.putExtra("SalesReportType", Globals.SalesAnalysis.dailySales.getDesc());
+            getActivity().startActivityForResult(intent, 1);
+            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        } else if (v.getId() == R.id.cvAdminWeeklySales) {
+            Intent intent = new Intent(getActivity(), DailySalesActivity.class);
+            intent.putExtra("SalesReportType", Globals.SalesAnalysis.weeklySales.getDesc());
             getActivity().startActivityForResult(intent, 1);
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
         } else if (v.getId() == R.id.cvAdminMonthlySales) {
             Intent intent = new Intent(getActivity(), DailySalesActivity.class);
-            intent.putExtra("SalesReportType", "Monthly Sales");
-            getActivity().startActivity(intent);
+            intent.putExtra("SalesReportType", Globals.SalesAnalysis.monthlySales.getDesc());
+            getActivity().startActivityForResult(intent,1);
+            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        }else if (v.getId() == R.id.cvAdminLeastDay) {
+            Intent intent = new Intent(getActivity(), DailySalesActivity.class);
+            intent.putExtra("SalesReportType", Globals.SalesAnalysis.leastSellingDay.getDesc());
+            getActivity().startActivityForResult(intent,1);
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
     }
@@ -194,9 +215,12 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
 
     @Override
     public void LastDayOfWeek(OrderMaster orderMaster) {
-//       leastDaySale.setText(orderMaster.getLeastSellingDayName()+", "+orderMaster.);
+        if(orderMaster!=null) {
+            String day =  orderMaster.getLeastSellingDayName();
+            day = day.substring(0,3);
+            leastDaySale.setText(day + ", " + orderMaster.getNetAmount());
+        }
     }
-
 
     public void OrderBookingData() {
         newOrder.setText(Globals.newOrder);
@@ -212,10 +236,15 @@ public class HomeOptionFragment extends Fragment implements DashboardJSONParser.
         objDashboardJSONParser.SelectOrderMasterDailyWeeklyMonthlyOrders(getActivity(), this, String.valueOf(Globals.linktoBusinessMasterId), String.valueOf(0));
     }
 
+    private void DataRequestLeastDay() {
+        DashboardJSONParser objDashboardJSONParser = new DashboardJSONParser();
+        objDashboardJSONParser.SelectOrderMasterLeastSellingDayOfLastWeek(getActivity(), this, String.valueOf(Globals.linktoBusinessMasterId), null, null, false);
+    }
+
     private void DataRequestUser() {
         DashboardJSONParser objDashboardJSONParser = new DashboardJSONParser();
 //        if (HomeActivity.isStart) {
-            objDashboardJSONParser.SelectDashBoardCounter(getActivity(), this, String.valueOf(Globals.linktoBusinessMasterId));
+        objDashboardJSONParser.SelectDashBoardCounter(getActivity(), this, String.valueOf(Globals.linktoBusinessMasterId));
 //        } else {
 //            OrderBookingData();
 //        }

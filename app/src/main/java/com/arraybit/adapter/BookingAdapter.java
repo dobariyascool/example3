@@ -54,7 +54,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingM
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(BookingMasterViewHolder holder, int position) {
-        BookingMaster objBookingMaster = alBookingMaster.get(position);
+        BookingMaster objBookingMaster = alBookingMaster.get(holder.getAdapterPosition());
 
         holder.txtDate.setText(String.valueOf(objBookingMaster.getToDate()));
         holder.txtTime.setText(String.valueOf(objBookingMaster.getFromTime()) + " To " + String.valueOf(objBookingMaster.getToTime()));
@@ -113,10 +113,10 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingM
         }
 
         if (isItemAnimate) {
-            if (position > previousPosition) {
+            if (holder.getAdapterPosition() > previousPosition) {
                 Globals.SetItemAnimator(holder);
             }
-            previousPosition = position;
+            previousPosition = holder.getAdapterPosition();
         }
     }
 
@@ -137,18 +137,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingM
             alBookingMaster.remove(position);
             notifyItemRemoved(position);
         }
-    }
-
-    public void BookingDataChanged(BookingMaster objBookingMaster) {
-        alBookingMaster.add(0, objBookingMaster);
-        isItemAnimate = false;
-        notifyDataSetChanged();
-    }
-
-    public void UpdateBookingStatus(int position) {
-        alBookingMaster.get(position).setBookingStatus((short) Globals.BookingStatus.Cancelled.getValue());
-        isItemAnimate = false;
-        notifyDataSetChanged();
     }
 
     public interface BookingOnClickListener {

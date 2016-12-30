@@ -3,7 +3,6 @@ package com.arraybit.parser;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,7 +16,6 @@ import com.arraybit.modal.OrderMaster;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,15 +27,17 @@ public class DashboardJSONParser {
     public String SelectOrderMasterDailyWeeklyMonthlyOrders = "SelectOrderMasterDailyWeeklyMonthlyOrders";
     public String SelectOrderMasterLeastSellingDayOfLastWeek = "SelectOrderMasterLeastSellingDayOfLastWeek";
 
-    SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat("d/M/yyyy", Locale.US);
     Date dt = null;
+    Date dt1 = null;
+    SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat("d/M/yyyy", Locale.US);
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+    SimpleDateFormat sdfDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     DashBoardListener objDashBoardListener;
     LastDayListener objLastDayListener;
 
     private Dashboard SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
-        Dashboard objDashboard ;
+        Dashboard objDashboard;
         try {
             if (jsonObject != null) {
                 objDashboard = new Dashboard();
@@ -114,7 +114,10 @@ public class DashboardJSONParser {
                 objOrderMaster.setMonth(jsonObject.getString("Month"));
             }
             if (!jsonObject.getString("LeastSellingDayName").equals("null")) {
-                objOrderMaster.setMonth(jsonObject.getString("LeastSellingDayName"));
+                objOrderMaster.setLeastSellingDayName(jsonObject.getString("LeastSellingDayName"));
+            }
+            if (!jsonObject.getString("OrderToDateTime").equals("null")) {
+                objOrderMaster.setOrderToDateTime(jsonObject.getString("OrderToDateTime"));
             }
 
             return objOrderMaster;
@@ -127,21 +130,21 @@ public class DashboardJSONParser {
         }
     }
 
-    public void SelectDashBoardCounter(final Context context,final Fragment targetFragment, String linktoBusinessMasterId) {
+    public void SelectDashBoardCounter(final Context context, final Fragment targetFragment, String linktoBusinessMasterId) {
         String url;
         try {
             if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("")) {
                 url = Service.Url + this.SelectDashBoardCounter + "/" + linktoBusinessMasterId;
             } else {
-                url = Service.Url + this.SelectDashBoardCounter + "/" + 1 ;
+                url = Service.Url + this.SelectDashBoardCounter + "/" + 1;
             }
-            Log.e("url"," "+url);
+            Log.e("url", " " + url);
             final RequestQueue queue = Volley.newRequestQueue(context);
             final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     try {
-                        Log.e("json"," "+jsonObject.toString());
+                        Log.e("json", " " + jsonObject.toString());
                         if (jsonObject != null) {
                             JSONObject jsonResponse = jsonObject.getJSONObject(SelectDashBoardCounter + "Result");
                             if (jsonResponse != null) {
@@ -169,21 +172,21 @@ public class DashboardJSONParser {
 
     }
 
-    public void SelectOrderMasterDailyWeeklyMonthlyOrders(final Context context,final Fragment targetFragment, String linktoBusinessMasterId,String linktoOrderStatusMasterId) {
+    public void SelectOrderMasterDailyWeeklyMonthlyOrders(final Context context, final Fragment targetFragment, String linktoBusinessMasterId, String linktoOrderStatusMasterId) {
         String url;
         try {
-            if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("") ){
-                url = Service.Url + this.SelectOrderMasterDailyWeeklyMonthlyOrders + "/" + linktoBusinessMasterId ;
+            if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("")) {
+                url = Service.Url + this.SelectOrderMasterDailyWeeklyMonthlyOrders + "/" + linktoBusinessMasterId;
             } else {
-                url = Service.Url + this.SelectOrderMasterDailyWeeklyMonthlyOrders + "/" + 1 ;
+                url = Service.Url + this.SelectOrderMasterDailyWeeklyMonthlyOrders + "/" + 1;
             }
-            Log.e("url"," "+url);
+            Log.e("url", " " + url);
             final RequestQueue queue = Volley.newRequestQueue(context);
             final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     try {
-                        Log.e("json"," "+jsonObject.toString());
+                        Log.e("json", " " + jsonObject.toString());
                         if (jsonObject != null) {
                             JSONObject jsonResponse = jsonObject.getJSONObject(SelectOrderMasterDailyWeeklyMonthlyOrders + "Result");
                             if (jsonResponse != null) {
@@ -211,56 +214,81 @@ public class DashboardJSONParser {
 
     }
 
-    public void SelectOrderMasterLeastSellingDayOfLastWeek(final Context context,final Fragment targetFragment, String linktoBusinessMasterId) {
+    public void SelectOrderMasterLeastSellingDayOfLastWeek(final Context context, final Fragment targetFragment, String linktoBusinessMasterId, String fromDate, String toDate, boolean isDateRange) {
         String url;
         try {
-            if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("")) {
-                url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + linktoBusinessMasterId;
-            } else {
-                url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + 1 ;
+
+            if (isDateRange) {
+                if (fromDate != null && !fromDate.equals("") && toDate != null && !toDate.equals("")) {
+                    dt = sdfControlDateFormat.parse(fromDate);
+                    dt1 = sdfControlDateFormat.parse(toDate);
+                }
             }
-            Log.e("url"," "+url);
+            if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("")) {
+                if (isDateRange) {
+                    if (dt != null && dt1 != null) {
+                        url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + linktoBusinessMasterId + "/" + sdfDateFormat.format(dt) + "/" + sdfDateFormat.format(dt1) + "/" + String.valueOf(isDateRange);
+                    } else {
+                        url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + linktoBusinessMasterId + "/" + null + "/" + null + "/" + String.valueOf(false);
+                    }
+                } else {
+                    url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + linktoBusinessMasterId + "/" + null + "/" + null + "/" + String.valueOf(isDateRange);
+                }
+            } else {
+                url = Service.Url + this.SelectOrderMasterLeastSellingDayOfLastWeek + "/" + 1 + "/" + null + "/" + null + "/" + String.valueOf(false);
+            }
+
+            if (targetFragment != null) {
+                objLastDayListener = (LastDayListener) targetFragment;
+            } else {
+                objLastDayListener = (LastDayListener) context;
+            }
+
+            Log.e("url", " " + url);
             final RequestQueue queue = Volley.newRequestQueue(context);
             final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     try {
-                        Log.e("json"," "+jsonObject.toString());
+                        Log.e("json", " " + jsonObject.toString());
                         if (jsonObject != null) {
                             JSONObject jsonResponse = jsonObject.getJSONObject(SelectOrderMasterLeastSellingDayOfLastWeek + "Result");
                             if (jsonResponse != null) {
-                                objLastDayListener = (LastDayListener) targetFragment;
-                                objLastDayListener.LastDayOfWeek(SetClassOrderMasterPropertiesFromJSONArray(jsonResponse));
+//                                objLastDayListener = (LastDayListener) targetFragment;
+                                OrderMaster orderMaster = new OrderMaster();
+                                orderMaster.setLeastSellingDayName(jsonResponse.getString("LeastSellingDayName"));
+                                orderMaster.setOrderToDateTime(jsonResponse.getString("OrderDateTimeString"));
+                                orderMaster.setNetAmount(jsonResponse.getDouble("NetAmount"));
+                                objLastDayListener.LastDayOfWeek(orderMaster);
                             }
                         }
                     } catch (Exception e) {
-                        objLastDayListener = (LastDayListener) targetFragment;
-                        objLastDayListener.LastDayOfWeek( null);
+//                        objLastDayListener = (LastDayListener) targetFragment;
+                        objLastDayListener.LastDayOfWeek(null);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    objLastDayListener = (LastDayListener) targetFragment;
+//                    objLastDayListener = (LastDayListener) targetFragment;
                     objLastDayListener.LastDayOfWeek(null);
                 }
             });
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
-            objLastDayListener = (LastDayListener) targetFragment;
+//            objLastDayListener = (LastDayListener) targetFragment;
             objLastDayListener.LastDayOfWeek(null);
         }
 
     }
 
-    public interface DashBoardListener
-    {
+    public interface DashBoardListener {
         void DashboardResponse(String errorCode, Dashboard objDashboard);
+
         void DashBoardSales(String dailySales, String weeklySales, String monthlySales);
     }
 
-    public interface LastDayListener
-    {
+    public interface LastDayListener {
         void LastDayOfWeek(OrderMaster orderMaster);
     }
 }

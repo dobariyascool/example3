@@ -19,6 +19,7 @@
             android:layout_centerInParent="true"
             android:contentDescription="@string/splash_screen"
             android:padding="50dp"
+            android:src="@drawable/splash_logo"
             android:scaleType="centerInside" />
     </RelativeLayout>
 
@@ -27,16 +28,16 @@
         android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
         android:background="@android:color/black"
-        android:gravity="end|bottom">
+        android:gravity="end|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true">
 
         <ImageView
             android:id="@+id/ivCompanyLogo"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingSmall"
             android:contentDescription="@string/splash_screen"
             android:gravity="end"

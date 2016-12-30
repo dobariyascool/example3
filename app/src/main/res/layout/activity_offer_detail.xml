@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/offwhite"
+    android:background="@color/background_img"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.arraybit.abposa.OfferDetailActivity">
@@ -263,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/terms_and_conditions"
                     android:animateLayoutChanges="true"
-                    android:background="@color/offWhiteDark"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/expand" />
             </LinearLayout>
 

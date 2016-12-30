@@ -54,7 +54,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderMasterV
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(OrderMasterViewHolder holder, int position) {
-        OrderMaster objOrderMaster = alOrderMaster.get(position);
+        OrderMaster objOrderMaster = alOrderMaster.get(holder.getAdapterPosition());
         holder.txtOrderNumber.setText(objOrderMaster.getOrderNumber());
         holder.txtTotalAmount.setText(Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
         String[] strDateTime = objOrderMaster.getOrderDateTime().split("T");
@@ -108,10 +108,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderMasterV
         }
 
         if (isItemAnimate) {
-            if (position > previousPosition) {
+            if (holder.getAdapterPosition() > previousPosition) {
                 Globals.SetItemAnimator(holder);
             }
-            previousPosition = position;
+            previousPosition = holder.getAdapterPosition();
         }
     }
 
@@ -119,12 +119,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderMasterV
         alOrderMaster.addAll(result);
         isItemAnimate = false;
         notifyDataSetChanged();
-    }
-
-    public void UpdateOrderData(int position) {
-        alOrderMaster.get(position).setlinktoOrderStatusMasterId((short) Globals.OrderStatus.Cancelled.getValue());
-        isItemAnimate = false;
-        notifyItemChanged(position);
     }
 
     public void RemoveOrderData(int position) {

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    style="?android:attr/spinnerItemStyle"
+    android:maxLines="1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.rey.material.widget.TextView
-        android:id="@+id/txtSpinnerItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:gravity="center"
-        android:maxLines="1"
-        android:padding="@dimen/control_SpecingSmall"
-        android:textColor="@color/primary_dark" />
-
-</LinearLayout>
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:textColor="@color/primary_dark"
+    android:gravity="center"
+    android:layout_margin="@dimen/control_SpecingSmall"
+    android:padding="@dimen/control_SpecingTiny"
+    android:textAlignment="inherit"/>

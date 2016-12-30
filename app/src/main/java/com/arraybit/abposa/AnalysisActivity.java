@@ -18,7 +18,7 @@ public class AnalysisActivity extends AppCompatActivity implements AnalysisFragm
         setContentView(R.layout.activity_analysis);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = new AnalysisFragment(this);
+        Fragment fragment = new AnalysisFragment();
         Globals.targetFragment = fragment;
         fragmentTransaction.replace(R.id.analysisFragmentLayout, fragment, getResources().getString(R.string.title_activity_analysis));
         fragmentTransaction.addToBackStack(getResources().getString(R.string.title_activity_analysis));

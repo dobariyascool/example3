@@ -341,8 +341,7 @@ public class ChartDataJSONParser {
 
     }
 
-    public interface ChartDataListener
-    {
+    public interface ChartDataListener {
         void OrderTypeWise(ArrayList<OrderMaster> lstOrderMaster);
         void MostSellingItem(ArrayList<OrderItemTran> lstOrderItemTran, boolean isMost);
         void YearlySales(ArrayList<OrderMaster> lstOrderMaster);

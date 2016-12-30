@@ -10,8 +10,8 @@
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/control_SpecingSmall"
-        android:paddingTop="@dimen/control_SpecingSmall">
+        android:paddingBottom="@dimen/control_SpecingTiny"
+        android:paddingTop="@dimen/control_SpecingTiny">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/txtStatus"
-                android:background="@color/offwhite"
+                android:background="@android:color/transparent"
                 android:paddingEnd="@dimen/control_SpecingSmall"
                 android:paddingStart="@dimen/control_SpecingSmall" />
 

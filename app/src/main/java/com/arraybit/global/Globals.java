@@ -4,26 +4,35 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arraybit.abposa.MyFirebaseMessagingService;
 import com.arraybit.abposa.R;
-import com.rey.material.widget.EditText;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +56,7 @@ public class Globals {
     public static String newBooking;
     public static String cancleBooking;
     static int y, M, d, H, m;
+    static SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
 
     public static void HideKeyBoard(Context context, View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -57,7 +67,7 @@ public class Globals {
         Snackbar snackbar = Snackbar.make(view, message, duration);
         View snackView = snackbar.getView();
         if (Build.VERSION.SDK_INT >= 21) {
-            snackView.setElevation(R.dimen.snackbar_elevation);
+            snackView.setElevation(context.getResources().getDimension(R.dimen.snackbar_elevation));
         }
         TextView txt = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
         txt.setGravity(Gravity.CENTER);
@@ -97,14 +107,6 @@ public class Globals {
         fragmentTransaction.commit();
     }
 
-    public static void ReplaceFragment(Fragment fragment, FragmentManager fragmentManager, String fragmentName, int layoutId) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
-        fragmentTransaction.replace(layoutId, fragment, fragmentName);
-        fragmentTransaction.addToBackStack(fragmentName);
-        fragmentTransaction.commit();
-    }
-
     public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg, RecyclerView recyclerView, int errorIcon) {
         TextView txtMsg = (TextView) layout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) layout.findViewById(R.id.ivErrorIcon);
@@ -133,63 +135,74 @@ public class Globals {
     }
 
     public static void ShowDatePickerDialog(final EditText txtView, Context context, final boolean IsPreventNextDateRequest) {
-        final Calendar c = Calendar.getInstance();
+        try {
+            final Calendar c = Calendar.getInstance();
 
-        if (!txtView.getText().toString().equals("")) {
-            SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
-            try {
-                Date dt = sdfControl.parse(String.valueOf(txtView.getText()));
-                c.setTime(dt);
-            } catch (ParseException ignored) {
+            if (!txtView.getText().toString().equals("")) {
+                SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
+                try {
+                    Date dt = sdfControl.parse(String.valueOf(txtView.getText()));
+                    c.setTime(dt);
+                } catch (ParseException ignored) {
+                }
             }
-        }
 
-        y = c.get(Calendar.YEAR);
-        M = c.get(Calendar.MONTH);
-        d = c.get(Calendar.DAY_OF_MONTH);
+            y = c.get(Calendar.YEAR);
+            M = c.get(Calendar.MONTH);
+            d = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dp = new DatePickerDialog(context,
-                new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog dp = new DatePickerDialog(context,
+                    new DatePickerDialog.OnDateSetListener() {
 
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                        Calendar calendar = Calendar.getInstance();
+                            Calendar calendar = Calendar.getInstance();
 
-                        Date date = new Date(view.getMinDate());
-                        calendar.setTime(date);
+                            Date date = new Date(view.getMinDate());
+                            calendar.setTime(date);
 
-                        y = year;
-                        M = monthOfYear;
-                        d = dayOfMonth;
+                            y = year;
+                            M = monthOfYear;
+                            d = dayOfMonth;
 
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.YEAR, year);
-                        cal.set(Calendar.MONTH, monthOfYear);
-                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        cal.set(Calendar.HOUR_OF_DAY, 0);
-                        cal.set(Calendar.MINUTE, 0);
-                        cal.set(Calendar.SECOND, 0);
-                        cal.set(Calendar.MILLISECOND, 0);
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.YEAR, year);
+                            cal.set(Calendar.MONTH, monthOfYear);
+                            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
 
-                        SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
-                        if (IsPreventNextDateRequest) {
-                            if (d >= calendar.get(Calendar.DAY_OF_MONTH) || M >= calendar.get(Calendar.MONTH) || y >= calendar.get(Calendar.YEAR)) {
-                                txtView.setText(sdfControl.format(cal.getTime()));
+                            SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
+                            if (IsPreventNextDateRequest) {
+                                if (d >= calendar.get(Calendar.DAY_OF_MONTH) || M >= calendar.get(Calendar.MONTH) || y >= calendar.get(Calendar.YEAR)) {
+                                    txtView.setText(sdfControl.format(cal.getTime()));
+                                } else {
+                                    txtView.setText(sdfControl.format(new Date()));
+                                }
                             } else {
-                                txtView.setText(sdfControl.format(new Date()));
+                                txtView.setText(sdfControl.format(cal.getTime()));
                             }
-                        } else {
-                            txtView.setText(sdfControl.format(cal.getTime()));
                         }
-                    }
 
-                }, y, M, d);
-        if (IsPreventNextDateRequest) {
-            dp.getDatePicker().setMaxDate(System.currentTimeMillis() + 10000);
+                    }, y, M, d);
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("BusinessPreference", "CreateDateTime", context) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "CreateDateTime", context).equals("")) {
+                Date dt = sdfControl.parse(objSharePreferenceManage.GetPreference("BusinessPreference", "CreateDateTime", context));
+                dp.getDatePicker().setMinDate(dt.getTime());
+            }
+
+            if (IsPreventNextDateRequest) {
+                dp.getDatePicker().setMaxDate(System.currentTimeMillis() + 10000);
+            }
+            dp.hide();
+            dp.show();
+
+        } catch (Exception e) {
+            Log.e("error in date", " " + e.getMessage());
         }
-        dp.hide();
-        dp.show();
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -199,22 +212,67 @@ public class Globals {
         return sdf.format(calendar.getTime());
     }
 
+    public static void EnableBroadCastReceiver(Activity activity) {
+        ComponentName receiver = new ComponentName(activity, MyFirebaseMessagingService.class);
+        PackageManager pm = activity.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        Log.e("enable service", " ");
+    }
+
+    public static void DisableBroadCastReceiver(Activity activity) {
+        ComponentName receiver = new ComponentName(activity, MyFirebaseMessagingService.class);
+        PackageManager pm = activity.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+        Log.e("disable service", " ");
+    }
+
+    public static void SelectImage(final Context context, final Fragment fragment, final int requestCodeCamera, final int requestCodeGallery) {
+        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Remove Image"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialog);
+        builder.setTitle("ADD PHOTO");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(android.os.Environment
+                            .getExternalStorageDirectory(), "temp.jpg");
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    fragment.startActivityForResult(intent, requestCodeCamera);
+                } else if (items[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    fragment.startActivityForResult(Intent.createChooser(intent, "Select File"), requestCodeGallery);
+                } else if (items[item].equals("Remove Image")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
     //region Enum
     public enum SalesAnalysis {
 
         dailySales(0, "Daily Sales", true),
-        weeklySales(1, "Weekly Sales", false),
+        weeklySales(1, "Weekly Sales", true),
         monthlySales(2, "Monthly Sales", true),
-        leastSellingDay(3, "Least Selling Day", false),
-        leastSellingHours(4, "Least Selling Hours", false),
-        byDateRange(5, "By Date Range Sales", true),
-        lowStock(6, "Low Stock", false),
-        profitloss(7, "Profit/Loss", false),
-        yearlySales(8, "Yearly Sales", true),
-        orderTypewise(9, "Order Type Wise", true),
-        categoryWise(10, "Category Wise", true),
-        leastSellingItems(11, "Least Selling Items", true),
-        mostSellingItems(12, "Most Selling Items", true);
+        leastSellingDay(3, "Least Selling Day", true),
+        //        leastSellingHours(4, "Least Selling Hours", false),
+//        byDateRange(5, "By Date Range Sales", true),
+        lowStock(4, "Low Stock", false),
+        profitloss(5, "Profit/Loss", false),
+        yearlySales(6, "Yearly Sales", true),
+        orderTypewise(7, "Order Type Wise", true),
+        categoryWise(8, "Category Wise", true),
+        leastSellingItems(9, "Least Selling Items", true),
+        mostSellingItems(10, "Most Selling Items", true);
 
         private int id;
         private String desc;
@@ -361,6 +419,69 @@ public class Globals {
 
         BookingStatus(int value) {
             intValue = value;
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    public enum NotificationType {
+        Item(1,"Item"),
+        Offer(2,"Offer"),
+        Category(3,"Category"),
+        General(4,"General");
+
+        private int intValue;
+        private String type;
+
+        NotificationType(int intValue,String type) {
+            this.type = type;
+            this.intValue = intValue;
+        }
+
+        public static String getType(int intValue) {
+            for (NotificationType sale : NotificationType.values()) {
+                if (sale.getValue() == intValue) {
+                    return sale.getType();
+                }
+            }
+            return null;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    public enum CustomerType {
+        All(1,"All"),
+        Birthdays(2,"Birthdays"),
+        Anniversary(3,"Anniversary");
+
+        private int intValue;
+        private String customerType;
+
+        CustomerType(int intValue,String customerType) {
+            this.customerType = customerType;
+            this.intValue = intValue;
+        }
+
+        public static String getType(int intValue) {
+            for (CustomerType sale : CustomerType.values()) {
+                if (sale.getValue() == intValue) {
+                    return sale.getType();
+                }
+            }
+            return null;
+        }
+
+        public String getType() {
+            return customerType;
         }
 
         public int getValue() {

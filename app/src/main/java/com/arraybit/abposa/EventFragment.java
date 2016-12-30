@@ -3,18 +3,19 @@ package com.arraybit.abposa;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.EventAdapter;
 import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.Events;
 import com.arraybit.parser.EventJSONParser;
 import com.rey.material.widget.TextView;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventFragment extends Fragment implements View.OnClickListener, EventJSONParser.EventsListener {
+public class EventFragment extends Fragment implements View.OnClickListener, EventJSONParser.EventsListener, EventAdapter.EventClickListener {
 
     RecyclerView rvTodaysEvent, rvUpcomingEvent;
     ImageView ivTodaysEvent, ivUpcomingEvent;
@@ -33,6 +34,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
     int currentPageToday = 1, currentPageUpcoming = 1;
     EventAdapter adapterTodaysEvents, adapterUpcomingEvents;
     TextView txtUpcomingNoEvent, txtTodayNoEvent;
+    LinearLayout llTodaysEvent, llUpcomingEvent;
+//    ProgressDialog progressDialog;
 
     public EventFragment() {
         // Required empty public constructor
@@ -56,6 +59,12 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
             txtTodayNoEvent = (TextView) rootView.findViewById(R.id.txtTodayNoEvent);
             txtUpcomingNoEvent = (TextView) rootView.findViewById(R.id.txtUpcomingNoEvent);
 
+            llTodaysEvent = (LinearLayout) rootView.findViewById(R.id.llTodaysEvent);
+            llUpcomingEvent = (LinearLayout) rootView.findViewById(R.id.llUpcomingEvent);
+
+            llTodaysEvent.setOnClickListener(this);
+            llUpcomingEvent.setOnClickListener(this);
+
 //        linearLayoutManager = new LinearLayoutManager(getActivity());
 //        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -64,6 +73,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
 
             RequestEvents(getActivity().getResources().getString(R.string.todays_event));
             ivTodaysEvent.setImageResource(R.drawable.menu_up);
+            RequestEvents(getActivity().getResources().getString(R.string.upcoming_event));
+            ivUpcomingEvent.setImageResource(R.drawable.menu_up);
 
             rvTodaysEvent.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -118,10 +129,10 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.ivTodaysEvent) {
+        if (v.getId() == R.id.ivTodaysEvent || v.getId() == R.id.llTodaysEvent) {
             if (!isTEventExpand) {
-                isTEventExpand = true;
-                ivTodaysEvent.setImageResource(R.drawable.menu_up);
+//                isTEventExpand = true;
+//                ivTodaysEvent.setImageResource(R.drawable.menu_up);
                 currentPageToday = 1;
                 RequestEvents(getActivity().getString(R.string.todays_event));
             } else {
@@ -130,10 +141,10 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
                 isTEventExpand = false;
                 ivTodaysEvent.setImageResource(R.drawable.menu_down);
             }
-        } else if (v.getId() == R.id.ivUpcomingEvent) {
+        } else if (v.getId() == R.id.ivUpcomingEvent || v.getId() == R.id.llUpcomingEvent) {
             if (!isUEventExpand) {
-                isUEventExpand = true;
-                ivUpcomingEvent.setImageResource(R.drawable.menu_up);
+//                isUEventExpand = true;
+//                ivUpcomingEvent.setImageResource(R.drawable.menu_up);
                 currentPageUpcoming = 1;
                 RequestEvents(getActivity().getString(R.string.upcoming_event));
             } else {
@@ -147,12 +158,47 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
 
     @Override
     public void SetEvents(ArrayList<Events> lstEvents, String eventType) {
+//        if(progressDialog.isVisible()) {
+//            progressDialog.dismiss();
+//        }
+        if (eventType.equals(getActivity().getString(R.string.todays_event)) && currentPageToday == 1) {
+            isTEventExpand = true;
+            ivTodaysEvent.setImageResource(R.drawable.menu_up);
+        } else if (eventType.equals(getActivity().getString(R.string.upcoming_event)) && currentPageUpcoming == 1) {
+            isUEventExpand = true;
+            ivUpcomingEvent.setImageResource(R.drawable.menu_up);
+        }
         SetEventRecyclerView(lstEvents, eventType);
+    }
+
+    @Override
+    public void EventOnClick(int position, Events objEvent) {
+        SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+        String businessName = null;
+        String businessEmail = null;
+        if (sharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", getActivity()) != null
+                && !sharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", getActivity()).equals("")) {
+            businessName = sharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", getActivity());
+        }
+        if (sharePreferenceManage.GetPreference("BusinessPreference", "Email", getActivity()) != null
+                && !sharePreferenceManage.GetPreference("BusinessPreference", "Email", getActivity()).equals("")) {
+            businessEmail = sharePreferenceManage.GetPreference("BusinessPreference", "Email", getActivity());
+        }
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("Event", objEvent);
+        bundle.putString("BusinessName", businessName);
+        bundle.putString("BusinessEmail", businessEmail);
+        CallMessageFragment callMessageFragment = new CallMessageFragment();
+        callMessageFragment.setTargetFragment(this, 0);
+        callMessageFragment.setArguments(bundle);
+        callMessageFragment.show(getActivity().getSupportFragmentManager(), "");
     }
 
     private void RequestEvents(String eventType) {
 //        progressDialog = new ProgressDialog();
-//        progressDialog.show(getActivity().getSupportFragmentManager(), "");
+//        if(!progressDialog.isVisible()) {
+//            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+//        }
         EventJSONParser objEventJSONParser = new EventJSONParser();
         if (eventType.equals(getActivity().getString(R.string.todays_event))) {
             objEventJSONParser.SelectEventsPageWise(getActivity(), this, String.valueOf(currentPageToday), String.valueOf(Globals.linktoBusinessMasterId), eventType);
@@ -189,7 +235,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
                     } else if (lstEvents.size() < 10) {
                         currentPageToday += 1;
                     }
-                    adapterTodaysEvents = new EventAdapter(getActivity(), lstEvents, eventType);
+                    adapterTodaysEvents = new EventAdapter(getActivity(), this, lstEvents, eventType);
                     rvTodaysEvent.setVisibility(View.VISIBLE);
                     rvTodaysEvent.setAdapter(adapterTodaysEvents);
                     rvTodaysEvent.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -212,15 +258,15 @@ public class EventFragment extends Fragment implements View.OnClickListener, Eve
                     } else if (lstEvents.size() < 10) {
                         currentPageUpcoming += 1;
                     }
-                    adapterUpcomingEvents = new EventAdapter(getActivity(), lstEvents, eventType);
+                    adapterUpcomingEvents = new EventAdapter(getActivity(), this, lstEvents, eventType);
                     rvUpcomingEvent.setVisibility(View.VISIBLE);
                     rvUpcomingEvent.setAdapter(adapterUpcomingEvents);
                     rvUpcomingEvent.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
             }
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

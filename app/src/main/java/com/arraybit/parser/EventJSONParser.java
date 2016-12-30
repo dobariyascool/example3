@@ -37,9 +37,12 @@ public class EventJSONParser {
                 objEvents = new Events();
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("EventDate"));
                 objEvents.setEventDate(sdfControlDateFormat.format(dt));
-//                objEvents.setLinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objEvents.setUserName(jsonArray.getJSONObject(i).getString("UserName"));
                 objEvents.setType((short) jsonArray.getJSONObject(i).getInt("type"));
+                if(jsonArray.getJSONObject(i).getString("PersonMobile")!=null && !jsonArray.getJSONObject(i).getString("PersonMobile").equals(""))
+                {
+                    objEvents.setPersonMobile(jsonArray.getJSONObject(i).getString("PersonMobile"));
+                }
                 lstEvents.add(objEvents);
             }
             return lstEvents;
@@ -71,8 +74,8 @@ public class EventJSONParser {
                             }
                         }
                     } catch (Exception e) {
-//                        objEventsListener = (EventsListener) targetFragment;
-//                        objEventsListener.SetEvents(null, eventType);
+                        objEventsListener = (EventsListener) targetFragment;
+                        objEventsListener.SetEvents(null, eventType);
                         Log.e("json", " " + e.getMessage());
 
                     }

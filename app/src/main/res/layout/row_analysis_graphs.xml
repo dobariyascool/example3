@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_analysis"
-    style="@style/CardViewNewOption"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/control_SpecingTiny"
-    android:baselineAligned="false"
+    android:layout_height="55dp"
     android:padding="@dimen/control_SpecingTiny"
-    app:cardBackgroundColor="@color/card_white">
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/event_line">
 
     <LinearLayout
+        android:id="@+id/card_analysis"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/linear_click"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
             <LinearLayout
                 android:id="@+id/childLayout"
@@ -33,12 +40,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
+                    android:gravity="start|center"
                     android:padding="@dimen/control_SpecingSmall"
                     android:text="@string/golfDailySales"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/control_TextMedium"
-                    android:textStyle="bold" />
+                    />
             </LinearLayout>
 
             <!--<LinearLayout-->
@@ -52,11 +59,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:gravity="end"
+                android:gravity="center|end"
+                android:textStyle="bold"
                 android:padding="@dimen/control_SpecingSmall"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/control_TextMedium"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/ivVisible"
@@ -68,12 +76,14 @@
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="@dimen/control_SpecingSmall"
                 android:paddingTop="@dimen/control_SpecingTiny"
+                android:tint="@color/accent"
                 app:srcCompat="@drawable/right"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                android:visibility="gone"/>
 
             <!--</LinearLayout>-->
 
         </LinearLayout>
 
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>

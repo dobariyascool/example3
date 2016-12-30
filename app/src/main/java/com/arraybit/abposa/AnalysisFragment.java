@@ -49,18 +49,11 @@ public class AnalysisFragment extends Fragment implements ChartDataJSONParser.Ch
     ArrayList<String> salesType = new ArrayList<>();
     ArrayList<Boolean> isGraphArrayList = new ArrayList<>();
     ActivityBack objActivityBack;
-    Context context;
+//    Context context;
 
     public AnalysisFragment() {
         // Required empty public constructor
     }
-
-
-    public AnalysisFragment(Context context) {
-
-        this.context = context;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,7 +89,7 @@ public class AnalysisFragment extends Fragment implements ChartDataJSONParser.Ch
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_activity_analysis))) {
-                objActivityBack = (ActivityBack) context;
+                objActivityBack = (ActivityBack) getActivity();
                 objActivityBack.BackClicked();
 //                getActivity().setResult(Activity.RESULT_OK);
 //                getActivity().finish();

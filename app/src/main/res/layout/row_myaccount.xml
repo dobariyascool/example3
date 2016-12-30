@@ -9,15 +9,25 @@
     <LinearLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtTitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="start|center"
             android:padding="@dimen/control_SpecingSmall"
+            android:layout_weight="2"
             android:textColor="@color/blue_grey" />
 
+        <com.rey.material.widget.Switch
+            android:id="@+id/sPushNotificationOnOff"
+            style="@style/Switch"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/control_SpecingNormal"
+            android:gravity="center|end" />
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

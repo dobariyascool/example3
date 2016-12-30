@@ -19,7 +19,8 @@
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="65dp"
-            android:layout_height="65dp">
+            android:layout_height="65dp"
+            android:layout_marginStart="@dimen/control_SpecingNormal">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -57,11 +58,12 @@
                 android:gravity="start"
                 android:maxLength="28"
                 android:maxLines="1"
+                android:text="name"
                 android:paddingEnd="@dimen/control_SpecingSmall"
                 android:paddingStart="@dimen/control_SpecingSmall"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/control_TextNormal"
-                android:visibility="gone" />
+                />
 
             <com.rey.material.widget.CompoundButton
                 android:id="@+id/cbLogout"
@@ -73,7 +75,8 @@
                 android:paddingEnd="@dimen/control_SpecingSmall"
                 android:paddingStart="@dimen/control_SpecingSmall"
                 android:text="@string/siLogout"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
         </RelativeLayout>
 
 

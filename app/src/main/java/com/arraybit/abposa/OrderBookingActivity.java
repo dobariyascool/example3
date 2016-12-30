@@ -22,11 +22,10 @@ import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.BookingJSONParser;
 import com.arraybit.parser.ItemJSONParser;
-import com.arraybit.parser.OrderJSONParser;
 
 import java.util.ArrayList;
 
-public class OrderBookingActivity extends AppCompatActivity implements ItemJSONParser.ItemMasterRequestListener, OrderAdapter.OrderOnClickListener, OrderJSONParser.OrderMasterRequestListener, ConfirmDialog.ConfirmationResponseListener, BookingJSONParser.BookingRequestListener, BookingAdapter.BookingOnClickListener {
+public class OrderBookingActivity extends AppCompatActivity implements ItemJSONParser.ItemMasterRequestListener, OrderAdapter.OrderOnClickListener, ItemJSONParser.OrderMasterRequestListener, ConfirmDialog.ConfirmationResponseListener, BookingJSONParser.BookingRequestListener, BookingAdapter.BookingOnClickListener {
 
     RecyclerView rvOrdersBookings;
     LinearLayout errorLayout;
@@ -151,7 +150,7 @@ public class OrderBookingActivity extends AppCompatActivity implements ItemJSONP
     }
 
     @Override
-    public void ItemMasterResponse(ArrayList<ItemMaster> alItemMaster, boolean isFilter) {
+    public void ItemMasterResponse(ArrayList<ItemMaster> alItemMaster) {
         progressDialog.dismiss();
         this.alItemMaster = alItemMaster;
         SetRecyclerView();
@@ -177,8 +176,8 @@ public class OrderBookingActivity extends AppCompatActivity implements ItemJSONP
     public void ConfirmResponse() {
         progressDialog.show(getSupportFragmentManager(), "");
         if (activityName.equals(getResources().getString(R.string.golfNewOrders)) || activityName.equals(getResources().getString(R.string.golfCancelledOrders))) {
-            OrderJSONParser orderJSONParser = new OrderJSONParser();
-            orderJSONParser.UpdateOrderMasterStatus(String.valueOf(objOrder.getOrderMasterId()), OrderBookingActivity.this);
+            ItemJSONParser itemJSONParser = new ItemJSONParser();
+            itemJSONParser.UpdateOrderMasterStatus(String.valueOf(objOrder.getOrderMasterId()), OrderBookingActivity.this);
         } else if (activityName.equals(getResources().getString(R.string.golfNewBookings)) || activityName.equals(getResources().getString(R.string.golfCancelledBookings))) {
             BookingJSONParser objBookingJSONParser = new BookingJSONParser();
             objBookingJSONParser.UpdateBookingMaster(objBooking, this);

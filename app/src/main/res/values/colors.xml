@@ -20,12 +20,13 @@
     <color name="grey">#AFAFAF</color>
     <color name="grey_800">#424242</color>
     <color name="grey_700">#616161</color>
+    <color name="grey_600">#757575</color>
     <color name="grey_500">#9e9e9e</color>
     <color name="grey_300">#eceff1</color>
     <color name="bluegrey_200">#B0BEC5</color>
     <color name="dimWhite">#c1c0c0</color>
 
-    <color name="background_img">#e0e0e0</color>
+    <color name="background_img">#F5F5F5</color>
 <!-- #0288d1 -->
     <!-- progress dialog-->
     <array name="colorArray">
@@ -34,7 +35,8 @@
         <item name="third">#FF6F00</item>
     </array>
 
-    <color name="transparent_white">#60FFFFFF</color>
+    <color name="transparent_white">#80FFFFFF</color>
+    <color name="transparent_black">#60000000</color>
     <color name="orange">#E65100</color>
     <color name="orange_light">#F17826</color>
 
@@ -56,7 +58,7 @@
     <color name="transparent_red">#50c62828</color>
     <color name="heading">#FF633611</color>
 
-    <color name="grey_600">#757575</color>
+
     <color name="blue_900">#0d47a1</color>
 
 </resources>

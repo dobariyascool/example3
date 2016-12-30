@@ -12,6 +12,7 @@ public class Events implements Parcelable
     String EventDate;
     short type ;
     String EventType;
+    String PersonMobile;
     short linktoBusinessMasterId ;
 
     public static final Creator<Events> CREATOR = new Creator<Events>() {
@@ -23,6 +24,7 @@ public class Events implements Parcelable
             objEvents.EventDate = in.readString();
             objEvents.type= (short) in.readInt();
             objEvents.EventType = in.readString();
+            objEvents.PersonMobile = in.readString();
             objEvents.linktoBusinessMasterId= (short) in.readInt();
             return objEvents;
         }
@@ -81,6 +83,14 @@ public class Events implements Parcelable
         this.linktoBusinessMasterId = linktoBusinessMasterId;
     }
 
+    public String getPersonMobile() {
+        return PersonMobile;
+    }
+
+    public void setPersonMobile(String personMobile) {
+        PersonMobile = personMobile;
+    }
+
     public static Creator<Events> getCREATOR() {
         return CREATOR;
     }
@@ -97,6 +107,7 @@ public class Events implements Parcelable
         dest.writeString(EventDate);
         dest.writeInt(type);
         dest.writeString(EventType);
+        dest.writeString(PersonMobile);
         dest.writeInt(linktoBusinessMasterId);
     }
 }

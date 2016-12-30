@@ -3,10 +3,12 @@ package com.arraybit.abposa;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
@@ -17,16 +19,17 @@ public class SplashScreenActivity extends AppCompatActivity {
     RelativeLayout splashScreenLayout;
     SharePreferenceManage objSharePreferenceManage;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
         splashScreenLayout = (RelativeLayout) findViewById(R.id.splashScreenLayout);
-//        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash_screen_background);
-//
-//        splashScreenLayout.setBackground(new BitmapDrawable(getResources(), originalBitmap));
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.air_splash);
+        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        splashScreenLayout.setBackground(new BitmapDrawable(getResources(),resizeBitmap));
 
         SetBusinessMasterID();
 
@@ -51,6 +54,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, 3000);
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     private void SetBusinessMasterID() {
         objSharePreferenceManage = new SharePreferenceManage();

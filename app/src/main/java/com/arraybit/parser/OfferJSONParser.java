@@ -1,6 +1,7 @@
 package com.arraybit.parser;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -16,7 +17,6 @@ import com.arraybit.modal.OfferMaster;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,13 +28,13 @@ public class OfferJSONParser {
 
     public String SelectOfferMaster = "SelectOfferMaster";
     public String SelectAllOfferMasterByFromDate = "SelectAllOfferMasterPageWise";
-    public String SelectOfferCodeVerification = "SelectOfferMasterOfferCodeVerification";
+    public String SelectAllOfferMaster= "SelectAllOfferMaster";
 
-    public SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     public Date dt = null;
     public OfferRequestListener objOfferRequestListener;
     SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.TimeFormat, Locale.US);
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+    public SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     SimpleDateFormat sdfDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     SimpleDateFormat sdfTimeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
@@ -186,11 +186,13 @@ public class OfferJSONParser {
     public void SelectAllOfferMasterByFromDate(String currentPage, String linktoBusinessMasterId, final Context context) {
         String url = Service.Url + this.SelectAllOfferMasterByFromDate + "/" + currentPage + "/" + linktoBusinessMasterId + "/" +
                 sdfControlDateFormat.format(new Date()) + "/" + Globals.GetCurrentTime();
+        Log.e("url"," "+url);
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
+                    Log.e("json"," "+jsonObject);
                     JSONArray jsonArray = jsonObject.getJSONArray(SelectAllOfferMasterByFromDate + "Result");
                     if (jsonArray != null) {
                         ArrayList<OfferMaster> offerMasters = SetListPropertiesFromJSONArray(jsonArray);
@@ -212,62 +214,41 @@ public class OfferJSONParser {
         });
         queue.add(jsonObjectRequest);
     }
+
+    public void SelectAllOfferMaster(String linktoBusinessMasterId, final Context context, final Fragment targetFragment) {
+        String url = Service.Url + this.SelectAllOfferMaster + "/" + linktoBusinessMasterId + "/" +
+                sdfControlDateFormat.format(new Date()) + "/" + Globals.GetCurrentTime();
+        Log.e("url"," "+url);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    Log.e("json"," "+jsonObject);
+                    JSONArray jsonArray = jsonObject.getJSONArray(SelectAllOfferMaster + "Result");
+                    if (jsonArray != null) {
+                        ArrayList<OfferMaster> offerMasters = SetListPropertiesFromJSONArray(jsonArray);
+                        objOfferRequestListener = (OfferRequestListener) targetFragment;
+                        objOfferRequestListener.OfferResponse(offerMasters, null);
+                    }
+                } catch (Exception e) {
+                    objOfferRequestListener = (OfferRequestListener) targetFragment;
+                    objOfferRequestListener.OfferResponse(null, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                objOfferRequestListener = (OfferRequestListener) targetFragment;
+                objOfferRequestListener.OfferResponse(null, null);
+            }
+
+        });
+        queue.add(jsonObjectRequest);
+    }
     //endregion
 
     //region Select
-
-    public void SelectOfferCodeVerification(final Context context, OfferMaster objOfferMaster) {
-        try {
-            JSONStringer stringer = new JSONStringer();
-            stringer.object();
-
-            stringer.key("objOfferMaster");
-            stringer.object();
-
-            stringer.key("OfferCode").value(objOfferMaster.getOfferCode());
-            stringer.key("MinimumBillAmount").value(objOfferMaster.getMinimumBillAmount());
-            stringer.key("linktoBusinessMasterId").value(objOfferMaster.getlinktoBusinessMasterId());
-            stringer.key("linktoCustomerMasterId").value(objOfferMaster.getLinktoCustomerMasterId());
-            stringer.key("linktoOrderTypeMasterIds").value(objOfferMaster.getlinktoOrderTypeMasterId());
-
-            stringer.endObject();
-
-            stringer.endObject();
-
-            String url = Service.Url + this.SelectOfferCodeVerification;
-
-            RequestQueue queue = Volley.newRequestQueue(context);
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(stringer.toString()), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    try {
-                        JSONObject jObject = jsonObject.getJSONObject(SelectOfferCodeVerification + "Result");
-                        if (jObject != null) {
-                            OfferMaster offerMaster = SetClassPropertiesFromJSONObject(jObject);
-                            objOfferRequestListener = (OfferRequestListener) context;
-                            objOfferRequestListener.OfferResponse(null, offerMaster);
-                        }
-                    } catch (Exception e) {
-                        objOfferRequestListener = (OfferRequestListener) context;
-                        objOfferRequestListener.OfferResponse(null, null);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    objOfferRequestListener = (OfferRequestListener) context;
-                    objOfferRequestListener.OfferResponse(null, null);
-                }
-
-            });
-            queue.add(jsonObjectRequest);
-        } catch (Exception ex) {
-            objOfferRequestListener = (OfferRequestListener) context;
-            objOfferRequestListener.OfferResponse(null, null);
-        }
-    }
-
     public void SelectOfferMaster(final Context context, int offerMasterId) {
         String url = Service.Url + this.SelectOfferMaster + "/" + offerMasterId;
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -303,11 +284,9 @@ public class OfferJSONParser {
     //endregion
 
     //region interface
-
     public interface OfferRequestListener {
         void OfferResponse(ArrayList<OfferMaster> alOfferMaster, OfferMaster objOfferMaster);
     }
-
     //endregion
 
 }

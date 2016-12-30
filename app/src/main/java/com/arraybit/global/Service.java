@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
+import android.util.Log;
 
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -18,7 +19,7 @@ import java.net.URL;
 public class Service {
 
 
-//    public static String Url = "http://10.0.3.2:2630/Service.svc/";
+//    public static String Url = "http://10.0.3.2:25788/Service.svc/";
     public static String Url = "http://10.0.0.100/pos/poswservice/service.svc/";
 
     public static Boolean CheckNet(Context context) {
@@ -31,7 +32,7 @@ public class Service {
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
-
+            Log.e("url"," "+url);
             URL Url = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
             conn.setDoInput(true);

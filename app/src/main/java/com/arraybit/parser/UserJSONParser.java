@@ -32,7 +32,6 @@ public class UserJSONParser {
     UserPasswordListener objUserPasswordListener;
 
     //region class methods
-
     private UserMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         UserMaster objUserMaster ;
         try {
@@ -98,7 +97,6 @@ public class UserJSONParser {
     //endregion
 
     //region update
-
     public void UpdateUserMasterPassword(String userMasterId, String userPassword, final Context context, final Fragment targetFragment) {
         String url;
         try {
@@ -151,7 +149,6 @@ public class UserJSONParser {
     //endregion
 
     //region Select
-
     public void SelectUserMaster(final Context context, String userName, String password, String token) {
         String url;
         try {
@@ -199,11 +196,9 @@ public class UserJSONParser {
         }
 
     }
-
     //endregion
 
     //region SelectAll
-
     public void SelectAllUserRightsTran(final Context context, String linktoRoleMasterId) {
         String url;
         try {
@@ -247,7 +242,6 @@ public class UserJSONParser {
         }
 
     }
-
     //endregion
 
     public interface UserRequestListener {

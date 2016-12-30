@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "337715065990",
+    "firebase_url": "https://abposa-d961b.firebaseio.com",
+    "project_id": "abposa-d961b",
+    "storage_bucket": "abposa-d961b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337715065990:android:93fc1c31a2e149b6",
+        "android_client_info": {
+          "package_name": "com.arraybit.abposa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337715065990-kg15910ttk2p54ha9s7fvuopim8pld0h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arraybit.abposa",
+            "certificate_hash": "9CEC056F39040CD21ED292BE2BC8AB82FC8A1329"
+          }
+        },
+        {
+          "client_id": "337715065990-bg28ol148skv14v3a2339vsjef2e65v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_qFYNRP54nMnQqHTdSAjf6eX85hmyxBo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337715065990-bg28ol148skv14v3a2339vsjef2e65v9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

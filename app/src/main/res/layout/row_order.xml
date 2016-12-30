@@ -53,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.15"
-                android:background="@android:color/white"
+                android:background="@android:color/transparent"
                 android:padding="@dimen/control_SpecingSmall" />
             <!--android:src="@drawable/cancel_drawable"-->
 
@@ -63,7 +63,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="@dimen/control_SpecingSmall"
                 android:layout_weight="0.1"
-                android:background="@android:color/white"
+                android:background="@android:color/transparent"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/control_SpecingSmall"/>
 

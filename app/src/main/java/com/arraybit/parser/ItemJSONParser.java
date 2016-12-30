@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -12,10 +13,12 @@ import com.android.volley.toolbox.Volley;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.modal.OrderMaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,14 +29,18 @@ import java.util.Locale;
 
 public class ItemJSONParser {
 
+    public String SelectAllItemMaster = "SelectAllItemMasterIdByCategoryMasterId";
     public String SelectAllOrderMasterOrderItemByStatus = "SelectAllOrderMasterWithOrderItemByStatus";
-    SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
-    SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US);
+    public String UpdateOrderMasterStatus = "UpdateOrderMasterStatus";
     Date fromDate = null;
     Date toDate = null;
+    Date dt = null;
+    SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+    SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US);
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
     SimpleDateFormat sdfDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     ItemMasterRequestListener objItemMasterRequestListener;
+    OrderMasterRequestListener objOrderMasterRequestListener;
 
     //region Class Methods
     private ItemMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
@@ -168,6 +175,60 @@ public class ItemJSONParser {
 
     //endregion
 
+    public void UpdateOrderMasterStatus(String orderMasterId, final Context context) {
+        dt = new Date();
+        try {
+            JSONStringer stringer = new JSONStringer();
+            stringer.object();
+
+            stringer.key("orderMaster");
+            stringer.object();
+
+            stringer.key("OrderMasterId").value(orderMasterId);
+            stringer.key("linktoOrderStatusMasterId").value(Globals.OrderStatus.Cancelled.getValue());
+
+            stringer.endObject();
+
+            stringer.endObject();
+
+            String url = Service.Url + this.UpdateOrderMasterStatus;
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(stringer.toString()), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    try {
+                        JSONObject jsonResponse = jsonObject.getJSONObject(UpdateOrderMasterStatus + "Result");
+
+                        if (jsonResponse != null) {
+                            String errorCode = String.valueOf(jsonResponse.getInt("ErrorNumber"));
+                            objOrderMasterRequestListener = (OrderMasterRequestListener) context;
+                            objOrderMasterRequestListener.OrderMasterResponse(errorCode, null);
+                        } else {
+                            objOrderMasterRequestListener = (OrderMasterRequestListener) context;
+                            objOrderMasterRequestListener.OrderMasterResponse("-1", null);
+                        }
+                    } catch (JSONException e) {
+                        objOrderMasterRequestListener = (OrderMasterRequestListener) context;
+                        objOrderMasterRequestListener.OrderMasterResponse("-1", null);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    objOrderMasterRequestListener = (OrderMasterRequestListener) context;
+                    objOrderMasterRequestListener.OrderMasterResponse("-1", null);
+                }
+            });
+            queue.add(jsonObjectRequest);
+
+        } catch (Exception ex) {
+            objOrderMasterRequestListener = (OrderMasterRequestListener) context;
+            objOrderMasterRequestListener.OrderMasterResponse("-1", null);
+        }
+    }
+
     public void SelectAllOrderMasterOrderItem(final Context context, String currentPage, String linktoBusinessMasterId, boolean IsCancelled) {
         try {
             Calendar cal = Calendar.getInstance();
@@ -178,7 +239,7 @@ public class ItemJSONParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String url = Service.Url + this.SelectAllOrderMasterOrderItemByStatus + "/" + currentPage + "/" + linktoBusinessMasterId + "/"+ String.valueOf(IsCancelled) +"/" + sdfDateFormat.format(fromDate) + "/" + sdfDateFormat.format(toDate);
+        String url = Service.Url + this.SelectAllOrderMasterOrderItemByStatus + "/" + currentPage + "/" + linktoBusinessMasterId + "/" + String.valueOf(IsCancelled) + "/" + sdfDateFormat.format(fromDate) + "/" + sdfDateFormat.format(toDate);
         Log.e("url", " " + url);
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
@@ -215,25 +276,57 @@ public class ItemJSONParser {
                             alItemMaster.add(objItemMaster);
                         }
                         objItemMasterRequestListener = (ItemMasterRequestListener) context;
-                        objItemMasterRequestListener.ItemMasterResponse(alItemMaster, false);
+                        objItemMasterRequestListener.ItemMasterResponse(alItemMaster);
                     }
                 } catch (Exception e) {
                     objItemMasterRequestListener = (ItemMasterRequestListener) context;
-                    objItemMasterRequestListener.ItemMasterResponse(null, false);
+                    objItemMasterRequestListener.ItemMasterResponse(null);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 objItemMasterRequestListener = (ItemMasterRequestListener) context;
-                objItemMasterRequestListener.ItemMasterResponse(null, false);
+                objItemMasterRequestListener.ItemMasterResponse(null);
             }
 
         });
         queue.add(jsonObjectRequest);
     }
 
+    public void SelectAllItemMaster(final Fragment targetFragment, final Context context, String categoryMasterId, String linktoBusinessMasterId) {
+        String url = Service.Url + this.SelectAllItemMaster + "/" + categoryMasterId + "/" + linktoBusinessMasterId ;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    JSONArray jsonArray = jsonObject.getJSONArray(SelectAllItemMaster + "Result");
+                    if (jsonArray != null) {
+                        objItemMasterRequestListener = (ItemMasterRequestListener) targetFragment;
+                        objItemMasterRequestListener.ItemMasterResponse(SetListPropertiesFromJSONArray(jsonArray));
+                    }
+                } catch (Exception e) {
+                    objItemMasterRequestListener = (ItemMasterRequestListener) targetFragment;
+                    objItemMasterRequestListener.ItemMasterResponse(null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                objItemMasterRequestListener = (ItemMasterRequestListener) targetFragment;
+                objItemMasterRequestListener.ItemMasterResponse(null);
+            }
+
+        });
+        queue.add(jsonObjectRequest);
+    }
+
+    public interface OrderMasterRequestListener {
+        void OrderMasterResponse(String errorCode, OrderMaster objOrderMaster);
+    }
+
     public interface ItemMasterRequestListener {
-        void ItemMasterResponse(ArrayList<ItemMaster> alItemMaster, boolean isFilter);
+        void ItemMasterResponse(ArrayList<ItemMaster> alItemMaster);
     }
 }

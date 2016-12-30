@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/signInLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f5f5f5"
     android:orientation="vertical"
     tools:context="com.arraybit.abposa.SignInActivity">
 
+    <include
+        android:id="@+id/internetLayout"
+        layout="@layout/internet_layout"
+        android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/signInLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/activity_vertical_margin"
@@ -18,19 +24,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"/>
+                android:layout_weight="1.5"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_weight="4.2"
                 android:orientation="vertical">
 
                 <ImageView
@@ -42,26 +48,28 @@
                     tools:ignore="ContentDescription" />
 
                 <!--<com.rey.material.widget.TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="Central Admin"-->
-                    <!--android:textSize="20dp"-->
-                    <!--android:visibility="gone"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Central Admin"-->
+                <!--android:textSize="20dp"-->
+                <!--android:visibility="gone"/>-->
                 <com.rey.material.widget.TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:gravity="center"
                     android:text="@string/member_login"
-                    android:textSize="10dp" />
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
 
         </LinearLayout>
 
@@ -76,26 +84,28 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingSmall">
-
-            <com.rey.material.widget.EditText
-                android:id="@+id/etUserName"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                android:hint="@string/siUserName"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="@dimen/control_SpecingTiny"
-                android:singleLine="true" />
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall">
 
             <!--<LinearLayout-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="match_parent"-->
             <!--android:orientation="vertical"-->
             <!--android:background="@android:color/transparent">-->
+
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etUserName"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:hint="@string/siUserName"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny" />
 
             <ImageView
                 android:id="@+id/ibClear"
@@ -105,9 +115,9 @@
                 android:layout_alignParentRight="true"
                 android:contentDescription="@string/clear_text"
                 android:padding="@dimen/control_SpecingSmall"
-                android:src="@mipmap/close"
                 android:tint="#757575"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:srcCompat="@mipmap/close" />
             <!--</LinearLayout>-->
 
         </RelativeLayout>
@@ -116,7 +126,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingSmall">
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingTiny">
 
             <com.rey.material.widget.EditText
                 android:id="@+id/etPassword"
@@ -128,7 +140,7 @@
                 android:inputType="textPassword"
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="@dimen/control_SpecingTiny"
-                android:singleLine="true" />
+                app:et_supportMaxLines="1" />
 
             <!--<LinearLayout-->
             <!--android:layout_width="wrap_content"-->
@@ -145,12 +157,29 @@
                 android:layout_margin="@dimen/control_SpecingSmall"
                 android:background="@drawable/showhideselector"
                 android:padding="@dimen/control_SpecingNormal"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!--</LinearLayout>-->
 
         </RelativeLayout>
         <!--</LinearLayout>-->
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtFrogotPassword"
+            style="@style/PrimaryTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingSmall"
+            android:gravity="center"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="@dimen/control_SpecingTiny"
+            android:text="Forgot Password?"
+            android:textColor="@color/grey_700"
+            app:et_supportMaxLines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -165,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_Height"
                 android:text="@string/siLogIn"
-                android:textSize="18dp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>

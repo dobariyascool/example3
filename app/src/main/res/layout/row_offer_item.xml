@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="0dp"
         android:paddingTop="2dp"
-        android:textColor="@color/heading"
+        android:textColor="@color/accent_dark"
         android:textSize="@dimen/control_TextNormal"/>
 
     <com.rey.material.widget.TextView

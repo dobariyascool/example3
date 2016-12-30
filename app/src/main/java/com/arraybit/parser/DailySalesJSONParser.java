@@ -1,7 +1,6 @@
 package com.arraybit.parser;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -14,10 +13,8 @@ import com.arraybit.global.Service;
 import com.arraybit.modal.OrderPaymentTran;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +26,6 @@ public class DailySalesJSONParser {
     public SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     public Date dt = null;
     public Date dt1 = null;
-    SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
     SimpleDateFormat sdfDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     SalesReportListener objSalesReportListener;
 
@@ -89,7 +85,7 @@ public class DailySalesJSONParser {
         }
     }
 
-    public void SelectDailySaleDateWise(final Context context, final Fragment targetFragment, String fromDate,String toDate, String linktoBusinessMasterId) {
+    public void SelectDailySaleDateWise(final Context context, String fromDate,String toDate, String linktoBusinessMasterId) {
         String url;
         try {
             if (linktoBusinessMasterId != null && !linktoBusinessMasterId.equals("") && fromDate != null && !fromDate.equals("")&& toDate != null && !toDate.equals("")) {
@@ -131,11 +127,9 @@ public class DailySalesJSONParser {
             objSalesReportListener.SetDailySalesReport(null);
             e.printStackTrace();
         }
-
     }
 
-    public interface SalesReportListener
-    {
+    public interface SalesReportListener{
         void SetDailySalesReport(ArrayList<OrderPaymentTran> lstOrderPaymentTran);
     }
 }

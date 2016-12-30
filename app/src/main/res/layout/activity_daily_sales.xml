@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llDailySales"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/offwhite"
+    android:background="@color/background_img"
     android:orientation="vertical"
     tools:context="com.arraybit.abposa.DailySalesActivity">
 
@@ -16,105 +15,174 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/control_SpecingTiny"
-        android:layout_marginStart="@dimen/control_SpecingTiny"
-        android:layout_marginTop="@dimen/control_SpecingSmall"
-        android:orientation="horizontal">
+        android:layout_marginEnd="@dimen/control_SpecingSmall"
+        android:layout_marginStart="@dimen/control_SpecingSmall"
+        android:background="@drawable/layout_separator"
+        android:orientation="vertical">
 
         <com.rey.material.widget.TextView
-            android:id="@+id/txtFromDate"
-            android:layout_width="0dp"
+            android:id="@+id/txtWeekInformation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginStart="@dimen/control_SpecingSmall"
-            android:layout_weight="0.4"
-            android:padding="5dp"
-            android:text="@string/sales_from_date"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/primary"
-            android:textSize="@dimen/control_TextMedium" />
-
-        <com.rey.material.widget.EditText
-            android:id="@+id/etdsFromDate"
-            style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_weight="1"
-            android:focusable="false"
-            android:onClick="FromDateOnClick"
-            android:singleLine="true"
-            app:et_dividerColor="@color/bluegrey_200" />
-
-        <Spinner
-            android:id="@+id/spinnerMonths"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_weight="1"
+            android:layout_marginTop="@dimen/control_SpecingSmall"
+            android:text="@string/MsgWeekInfo"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/control_SpecingNormal"
+            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:layout_marginTop="@dimen/control_SpecingNormal"
+            android:orientation="horizontal">
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtFromDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
+                android:layout_weight="0.4"
+                android:padding="@dimen/control_SpecingTiny"
+                android:text="From Date:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/control_TextMedium" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/etdsFromDate"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingTiny"
+                    android:background="@drawable/layout_separator"
+                    android:focusable="false"
+                    android:maxLines="1"
+                    android:onClick="FromDateOnClick"
+                    android:textSize="@dimen/control_TextMedium" />
+
+                <RelativeLayout
+                    android:id="@+id/rlSpinnerMonths"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="@dimen/control_SpecingSmall"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:background="@drawable/layout_separator"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/spinnerMonths"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/control_SpecingNormal"
+            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:orientation="horizontal">
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtToDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
+                android:layout_weight="0.4"
+                android:padding="@dimen/control_SpecingTiny"
+                android:text="To Date :"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/control_TextMedium" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/etdsToDate"
+                    style="@style/EditText"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingTiny"
+                    android:background="@drawable/layout_separator"
+                    android:focusable="false"
+                    android:maxLines="1"
+                    android:onClick="ToDateOnClick"
+                    android:textSize="@dimen/control_TextMedium" />
+
+                <RelativeLayout
+                    android:id="@+id/rlSpinnerYears"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="@dimen/control_SpecingSmall"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginStart="@dimen/control_SpecingSmall"
+                    android:background="@drawable/layout_separator"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/spinnerYears"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llLeastDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/control_SpecingTiny"
-        android:layout_marginStart="@dimen/control_SpecingTiny"
-        android:orientation="horizontal">
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.rey.material.widget.TextView
-            android:id="@+id/txtToDate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/control_SpecingSmall"
-            android:layout_weight="0.4"
-            android:padding="5dp"
-            android:text="@string/sales_to_date"
+            android:layout_marginStart="@dimen/control_SpecingMedium"
+            android:layout_marginTop="@dimen/control_SpecingNormal"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="Least Selling Day:"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary"
             android:textSize="@dimen/control_TextMedium" />
 
-        <com.rey.material.widget.EditText
-            android:id="@+id/etdsToDate"
-            style="@style/EditText"
-            android:layout_width="0dp"
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtLeastDay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_weight="1"
-            android:focusable="false"
-            android:onClick="ToDateOnClick"
-            android:singleLine="true"
-            app:et_dividerColor="@color/bluegrey_200" />
-
-        <Spinner
-            android:id="@+id/spinnerYears"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_weight="1"
-            android:visibility="gone" />
-
-        <!--<com.rey.material.widget.Spinner-->
-        <!--android:id="@+id/spinnerYears"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginEnd="@dimen/control_SpecingSmall"-->
-        <!--android:layout_marginStart="@dimen/control_SpecingTiny"-->
-        <!--android:layout_marginTop="@dimen/control_SpecingSmall"-->
-        <!--android:layout_weight="1"-->
-        <!--android:singleLine="true"-->
-        <!--android:visibility="gone" />-->
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingNormal"
+            android:padding="@dimen/control_SpecingTiny"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/control_TextMedium" />
 
     </LinearLayout>
 
@@ -122,6 +190,9 @@
         android:id="@+id/svTableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/control_SpecingSmall"
+        android:layout_marginStart="@dimen/control_SpecingSmall"
+        android:layout_marginTop="@dimen/control_SpecingSmall"
         android:visibility="gone">
 
         <LinearLayout

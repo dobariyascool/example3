@@ -6,12 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" > </uses-feature>
 
-    <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
-    <!-- <permission -->
-    <!-- android:name="com.example.gcmnotificationexample.permission.C2D_MESSAGE" -->
-    <!-- android:protectionLevel="signature" /> -->
-    <!-- <uses-permission android:name="com.example.gcmnotificationexample.permission.C2D_MESSAGE" /> -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/central_air_logo"
@@ -57,38 +58,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <!-- GCM Receiver -->
-        <!-- <receiver -->
-        <!-- android:name="com.google.android.gms.gcm.GcmReceiver" -->
-        <!-- android:exported="true" -->
-        <!-- android:permission="com.google.android.c2dm.permission.SEND"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
-
-
-        <!-- <category android:name="com.gnirt69.gcmexample" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-
-
-        <!-- &lt;!&ndash; GCM Receiver Service &ndash;&gt; -->
-        <!-- <service -->
-        <!-- android:name=".GCMPushReceiverService" -->
-        <!-- android:exported="false"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
-
-
-        <!-- &lt;!&ndash; GCM Registration Intent Service &ndash;&gt; -->
-        <!-- <service -->
-        <!-- android:name=".GCMRegistrationIntentService" -->
-        <!-- android:exported="false"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.gms.iid.InstanceID" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -117,6 +86,10 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".OrderBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".NotificationActivity"
+            android:label="@string/notification_title"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
     </application>

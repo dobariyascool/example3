@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,12 +22,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.parser.BusinessJSONParser;
+import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
 
 import java.util.ArrayList;
@@ -34,93 +37,126 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, BusinessJSONParser.BusinessRequestListener {
 
+    private static final long delay = 2000L;
     public static boolean isActive = false;
     public static boolean isStart = false;
     public static String mode;
     NavigationView navigationView;
     CompoundButton cbLogout;
-    TextView txtFullName, txtLetter;
+    TextView txtFullName, txtLetter, txtBusinessName;
     LinearLayout homeLayout, internetLayout, nameLayout;
     ImageView imageView;
     DrawerLayout drawer;
+    Toast toast = null;
+    private boolean mRecentlyBackPressed = false;
+    private Handler mExitHandler = new Handler();
+    private Runnable mExitRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            mRecentlyBackPressed = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(app_bar);
-        if (getSupportActionBar() != null) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+        try {
+            Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(app_bar);
+            if (getSupportActionBar() != null) {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+                }
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setLogo(R.mipmap.central_air);
             }
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.central_air);
-        }
 
-        //navigation view
-        View headerView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.nav_header_home, null);
-        cbLogout = (CompoundButton) headerView.findViewById(R.id.cbLogout);
-        imageView = (ImageView) headerView.findViewById(R.id.imageView);
-        nameLayout = (LinearLayout) headerView.findViewById(R.id.nameLayout);
-        txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
-        txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
+            toast = Toast.makeText(HomeActivity.this, "Press again to exit", Toast.LENGTH_SHORT);
 
-        cbLogout.setOnClickListener(this);
-        nameLayout.setOnClickListener(this);
+            //navigation view
+            View headerView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.nav_header_home, null);
+            cbLogout = (CompoundButton) headerView.findViewById(R.id.cbLogout);
+            imageView = (ImageView) headerView.findViewById(R.id.imageView);
+            nameLayout = (LinearLayout) headerView.findViewById(R.id.nameLayout);
+            txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
+            txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
+            txtBusinessName = (TextView) findViewById(R.id.txtBusinessName);
 
-        navigationView = (NavigationView) findViewById(R.id.naviViewHome);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.addHeaderView(headerView);
-        SetUserName();
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, app_bar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        // end navigation view
+            internetLayout = (LinearLayout) findViewById(R.id.internetLayout);
+            Button btnRetry = (Button) internetLayout.findViewById(R.id.btnRetry);
+            homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
+            cbLogout.setOnClickListener(this);
+            nameLayout.setOnClickListener(this);
+            btnRetry.setOnClickListener(this);
 
-        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-        if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this).equals("")) {
-            navigationView.getMenu().findItem(R.id.nav_business).setTitle(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this));
-        }
+            navigationView = (NavigationView) findViewById(R.id.naviViewHome);
+            navigationView.setNavigationItemSelectedListener(this);
+            navigationView.addHeaderView(headerView);
+            SetUserName();
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, app_bar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            // end navigation view
 
-        // check user type
-        if (objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("")) {
-            if (objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("User")) {
-                mode = objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this) ;
-            } else if(objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("Admin") ) {
-                mode = objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this) ;
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this).equals("")) {
+                navigationView.getMenu().findItem(R.id.nav_business).setTitle(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this));
+                txtBusinessName.setText(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this));
             }
-        }
-        AddFragmentInLayout(new HomeOptionFragment(), mode);
 
-        if (Globals.linktoBusinessMasterId == 0) {
-            if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this).equals("")) {
-                Globals.linktoBusinessMasterId = Short.parseShort(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this));
+            // check user type
+            if (objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("")) {
+                if (objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("User")) {
+                    mode = objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this);
+                } else if (objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this).equals("Admin")) {
+                    mode = objSharePreferenceManage.GetPreference("LoginPreference", "Role", HomeActivity.this);
+                }
             }
-            if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this).equals("")) {
-                Globals.linktoBusinessGroupMasterId = Short.parseShort(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this));
-            }
-        }
-        if (Globals.totalCounter > 0) {
-            if (Globals.totalCounter > 1) {
-                navigationView.getMenu().findItem(R.id.nav_business).setEnabled(true);
-            } else {
-                navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
-            }
-        } else {
-            if (Service.CheckNet(HomeActivity.this)) {
-                if (Globals.linktoBusinessGroupMasterId > 0) {
-                    RequestAllBusiness();
+
+            if (Service.CheckNet(this)) {
+                internetLayout.setVisibility(View.GONE);
+                homeLayout.setVisibility(View.VISIBLE);
+                AddFragmentInLayout(new HomeOptionFragment(), mode);
+                if (Globals.totalCounter > 0) {
+                    if (Globals.totalCounter > 1) {
+                        navigationView.getMenu().findItem(R.id.nav_business).setEnabled(true);
+                    } else {
+                        navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
+                    }
                 } else {
-                    navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
+                    if (Service.CheckNet(HomeActivity.this)) {
+                        if (Globals.linktoBusinessGroupMasterId > 0) {
+                            RequestAllBusiness();
+                        } else {
+                            navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
+                        }
+                    } else {
+                        Globals.ShowSnackBar(drawer, getResources().getString(R.string.MsgCheckConnection), HomeActivity.this, 1000);
+                    }
                 }
             } else {
-                Globals.ShowSnackBar(drawer, getResources().getString(R.string.MsgCheckConnection), HomeActivity.this, 1000);
+                internetLayout.setVisibility(View.VISIBLE);
+                Globals.SetErrorLayout(internetLayout, true, getResources().getString(R.string.MsgCheckConnection), null, R.drawable.wifi_off);
+                homeLayout.setVisibility(View.GONE);
+                navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
             }
+
+
+            if (Globals.linktoBusinessMasterId == 0) {
+                if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this).equals("")) {
+                    Globals.linktoBusinessMasterId = Short.parseShort(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessMasterId", HomeActivity.this));
+                }
+                if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this).equals("")) {
+                    Globals.linktoBusinessGroupMasterId = Short.parseShort(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessGroupMasterId", HomeActivity.this));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -131,7 +167,16 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finish();
+            if (mRecentlyBackPressed) {
+                toast.cancel();
+                mExitHandler.removeCallbacks(mExitRunnable);
+                mExitHandler = null;
+                finish();
+            } else {
+                mRecentlyBackPressed = true;
+                toast.show();
+                mExitHandler.postDelayed(mExitRunnable, delay);
+            }
         }
     }
 
@@ -178,6 +223,7 @@ public class HomeActivity extends AppCompatActivity
                     SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
                     if (objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this) != null && !objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this).equals("")) {
                         navigationView.getMenu().findItem(R.id.nav_business).setTitle(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this));
+                        txtBusinessName.setText(objSharePreferenceManage.GetPreference("BusinessPreference", "BusinessName", HomeActivity.this));
                     }
                 } else if (requestCode == 1) {
 
@@ -223,7 +269,9 @@ public class HomeActivity extends AppCompatActivity
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
 //            Globals.ChangeActivity(HomeActivity.this, OfferActivity.class, false);
         } else if (id == R.id.nav_notification) {
-
+            Intent intent = new Intent(HomeActivity.this, NotificationActivity.class);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
         } else if (id == R.id.nav_rate_us) {
             Uri uri = Uri.parse("market://details?id=" + getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -232,6 +280,13 @@ public class HomeActivity extends AppCompatActivity
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
             }
+        } else if (id == R.id.nav_logout) {
+            Globals.ClearPreference(HomeActivity.this);
+            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            finish();
         } else if (id == R.id.nav_exit) {
             System.exit(0);
         }
@@ -254,11 +309,35 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this, MyAccountActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        } else if (v.getId() == R.id.btnRetry) {
+            if (Service.CheckNet(HomeActivity.this)) {
+//                CheckUserNamePassword();
+                internetLayout.setVisibility(View.GONE);
+                homeLayout.setVisibility(View.VISIBLE);
+                AddFragmentInLayout(new HomeOptionFragment(), mode);
+                if (Globals.totalCounter > 0) {
+                    if (Globals.totalCounter > 1) {
+                        navigationView.getMenu().findItem(R.id.nav_business).setEnabled(true);
+                    } else {
+                        navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
+                    }
+                } else {
+                    if (Service.CheckNet(HomeActivity.this)) {
+                        if (Globals.linktoBusinessGroupMasterId > 0) {
+                            RequestAllBusiness();
+                        } else {
+                            navigationView.getMenu().findItem(R.id.nav_business).setEnabled(false);
+                        }
+                    } else {
+                        Globals.ShowSnackBar(drawer, getResources().getString(R.string.MsgCheckConnection), HomeActivity.this, 1000);
+                    }
+                }
+            }
         }
     }
 
     @Override
-    public void BusinessResponse(String errorCode, BusinessMaster objBusinessMaster, ArrayList<BusinessMaster> alBusinessMaster) {
+    public void BusinessResponse(String errorCode, ArrayList<BusinessMaster> alBusinessMaster) {
         if (alBusinessMaster != null && alBusinessMaster.size() != 0) {
             if (alBusinessMaster.size() > 1) {
                 Globals.totalCounter = alBusinessMaster.size();

@@ -2,17 +2,19 @@ package com.arraybit.global;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.github.clans.fab.FloatingActionButton;
+//import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     private float mTranslationY;
 
@@ -27,10 +29,14 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
-        if (child instanceof FloatingActionButton && dependency instanceof Snackbar.SnackbarLayout) {
+        // && dependency instanceof Snackbar.SnackbarLayout
+        if(child instanceof android.support.design.widget.FloatingActionButton && dependency instanceof Snackbar.SnackbarLayout){
             this.updateTranslation(parent, child, dependency);
         }
-        if (child instanceof FloatingActionMenu && dependency instanceof Snackbar.SnackbarLayout) {
+        else if (child instanceof FloatingActionButton && dependency instanceof Snackbar.SnackbarLayout) {
+            this.updateTranslation(parent, child, dependency);
+        }
+        else if (child instanceof FloatingActionMenu && dependency instanceof Snackbar.SnackbarLayout) {
             this.updateTranslation(parent, child, dependency);
         }
 
@@ -40,14 +46,13 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     private void updateTranslation(CoordinatorLayout parent, View child, View dependency) {
         float translationY = this.getTranslationY(parent, child);
         if (translationY != this.mTranslationY) {
-            ViewCompat.animate(child)
-                    .cancel();
+            ViewCompat.animate(child).cancel();
             if (Math.abs(translationY - this.mTranslationY) == (float) dependency.getHeight()) {
                 ViewCompat.animate(child)
-                        .translationY(translationY);
-//                        .setListener((ViewPropertyAnimatorListener) null);
+                        .translationY(translationY)
+                        .setListener((ViewPropertyAnimatorListener) null);
             } else {
-                ViewCompat.setTranslationY(child, translationY);
+                ViewCompat.setTranslationY(child,translationY);
             }
 
             this.mTranslationY = translationY;
@@ -89,12 +94,20 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
 
         if (child instanceof FloatingActionButton) {
             FloatingActionButton fab = (FloatingActionButton) child;
-            if (dyConsumed > 0 && !fab.isHidden()) {
-                fab.hide(true);
-            } else if (dyConsumed < 0 && fab.isHidden()) {
-                fab.show(true);
+            if (dyConsumed > 0 && fab.getVisibility() == View.VISIBLE) {
+                fab.setVisibility(View.GONE);
+            } else if (dyConsumed < 0 && fab.getVisibility() == View.GONE) {
+                fab.setVisibility(View.VISIBLE);
             }
-        } else {
+        }else if(child instanceof android.support.design.widget.FloatingActionButton){
+            android.support.design.widget.FloatingActionButton  fab = (android.support.design.widget.FloatingActionButton) child;
+            if (dyConsumed > 0 && fab.isShown()) {
+                fab.hide();
+            } else if (dyConsumed < 0 && !fab.isShown()) {
+                fab.show();
+            }
+        }
+        else if(child instanceof FloatingActionMenu){
             FloatingActionMenu fabMenu = (FloatingActionMenu) child;
             if (dyConsumed > 0 && !fabMenu.isMenuButtonHidden()) {
                 fabMenu.hideMenuButton(true);

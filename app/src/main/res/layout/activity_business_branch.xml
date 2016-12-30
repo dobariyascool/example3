@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/control_SpecingTiny"
         android:padding="@dimen/control_SpecingSmall"
         android:text="@string/bbaSelectCity"
         android:textColor="@color/primary_dark"
@@ -62,6 +63,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/control_SpecingSmall"
         android:text="@string/bbaSelectBranch"
+        android:layout_marginTop="@dimen/control_SpecingSmall"
         android:textColor="@color/primary_dark"
         android:textSize="@dimen/control_TextMedium" />
 
@@ -69,7 +71,6 @@
         android:id="@+id/rvBusinessBranch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/control_SpecingTiny"
         android:visibility="gone" />
 
 </LinearLayout>

@@ -270,7 +270,6 @@ public class BookingJSONParser {
         });
         queue.add(jsonObjectRequest);
     }
-
     //endregion
 
     public interface BookingRequestListener {

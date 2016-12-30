@@ -1,7 +1,7 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +22,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
     View view;
     Context context;
     String eventType;
-    private LayoutInflater inflater;
+    EventClickListener objEventClickListener;
 
-    public EventAdapter(Context context, ArrayList<Events> alEvents, String eventType) {
+    public EventAdapter(Context context, EventClickListener objEventClickListener, ArrayList<Events> alEvents, String eventType) {
         this.context = context;
         this.alEvents = alEvents;
-        inflater = LayoutInflater.from(context);
         this.eventType = eventType;
+        this.objEventClickListener= objEventClickListener;
     }
 
     public void EventsDataChanged(ArrayList<Events> result) {
@@ -39,11 +39,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
 
     @Override
     public EventsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        if (eventType.equals(context.getResources().getString(R.string.todays_event))) {
-            view = LayoutInflater.from(context).inflate(R.layout.row_todays_event, parent, false);
-//        } else if (eventType.equals(context.getResources().getString(R.string.upcoming_event))) {
-//            view = LayoutInflater.from(context).inflate(R.layout.row_upcoming_event, parent, false);
-//        }
+        view = LayoutInflater.from(context).inflate(R.layout.row_event, parent, false);
         return new EventsViewHolder(view);
     }
 
@@ -54,7 +50,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
 
         if (eventType.equals(context.getResources().getString(R.string.todays_event))) {
             if (objEvents.getType() == 0) {
-                holder.txtEventName.setText(context.getResources().getString(R.string.birthday));
+//                holder.txtEventName.setText(context.getResources().getString(R.string.birthday));
+                holder.txtEventName.setVisibility(View.GONE);
             } else if (objEvents.getType() == 1) {
                 holder.txtEventName.setText(context.getResources().getString(R.string.anniversary));
             }
@@ -63,10 +60,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
         }
         if (objEvents.getType() == 0) {
             Picasso.with(holder.ivEvent.getContext()).load(R.drawable.birthday_event).into(holder.ivEvent);
-//            holder.ivEvent.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.birthday_event));
         } else if (objEvents.getType() == 1) {
             Picasso.with(holder.ivEvent.getContext()).load(R.drawable.anniversary_event).into(holder.ivEvent);
-//            holder.ivEvent.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.anniversary_event));
         }
     }
 
@@ -77,7 +72,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
 
     class EventsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtEventDate, txtUserName, txtEventName;
+        TextView txtUserName, txtEventName;
         ImageView ivEvent;
         LinearLayout cvEvents;
 
@@ -87,11 +82,19 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
             cvEvents = (LinearLayout) itemView.findViewById(R.id.cvEvents);
             ivEvent = (ImageView) itemView.findViewById(R.id.ivEvent);
             txtUserName = (TextView) itemView.findViewById(R.id.txtUserName);
-//            if (eventType.equals(context.getResources().getString(R.string.todays_event))) {
-                txtEventName = (TextView) itemView.findViewById(R.id.txtEventName);
-//            } else if (eventType.equals(context.getResources().getString(R.string.upcoming_event))) {
-//                txtEventDate = (TextView) itemView.findViewById(R.id.txtEventDate);
-//            }
+            txtEventName = (TextView) itemView.findViewById(R.id.txtEventName);
+
+            cvEvents.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    objEventClickListener.EventOnClick(getAdapterPosition(),alEvents.get(getAdapterPosition()));
+                }
+            });
         }
+    }
+
+    public interface EventClickListener
+    {
+        void EventOnClick(int position, Events events);
     }
 }

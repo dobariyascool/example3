@@ -56,6 +56,7 @@
     <dimen name="card_PrimaryText">24sp</dimen>
     <dimen name="card_SubtitleText">14sp</dimen>
     <dimen name="leftHeight">40dp</dimen>
+    <dimen name="leftHeightRuppe">30dp</dimen>
     <!-- END Cards -->
 
     <!--Start Circular TextView -->

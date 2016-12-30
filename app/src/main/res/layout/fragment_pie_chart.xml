@@ -19,9 +19,6 @@
       android:id="@+id/pieChart"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/control_SpecingSmall"
-        android:layout_marginLeft="@dimen/control_SpecingSmall"
-        android:layout_marginRight="@dimen/control_SpecingSmall"
-        android:layout_marginTop="@dimen/control_SpecingSmall"/>
+        android:layout_margin="@dimen/control_SpecingSmall" />
 
 </LinearLayout>
