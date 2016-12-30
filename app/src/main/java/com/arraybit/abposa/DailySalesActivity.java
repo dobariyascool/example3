@@ -211,6 +211,7 @@ public class DailySalesActivity extends AppCompatActivity implements DailySalesJ
                             Months.add(Globals.Months.getMonth(i));
                         }
                         isLeastDate = true;
+
                     }
                 }
                 for (int i = leastYear; i <= thisYear; i++) {
